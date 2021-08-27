@@ -13,20 +13,12 @@ function checkEnv(envConfig) {
 			// app
 			NODE_ENV: joi.string().valid('dev', 'prod').default('dev'),
 			PORT: joi.number().default(8080),
-			HOST: joi
-				.string()
-				.uri({ scheme: [/http?/] })
-				.default('http://localhost'),
+			HOST: joi.string().uri().default('http://localhost'),
 			// db
 			MONGO_URI: joi
 				.string()
 				.regex(/^mongodb/)
-				.default('mongodb://localhost:27017/Project1'),
-			// auth
-			AUTH0_DOMAIN: joi.string().required(),
-			AUTH0_CLIENT_ID: joi.string().required(),
-			AUTH0_CLIENT_SECRET: joi.string().required(),
-			AUTH0_CALLBACK_URL: joi.string().required(),
+				.default('mongodb://localhost:27017/Radio'),
 		})
 		.unknown(true);
 
