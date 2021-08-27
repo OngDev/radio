@@ -4,7 +4,7 @@ const dislikeService = require('../services/dislike.service');
 
 async function getById(req, res, next) {
 	try {
-		const id = req.params;
+		const id = req.params.id;
 		const video = await videoService.getVideoById(id);
 		return res.json(video);
 	} catch (error) {
@@ -32,7 +32,7 @@ async function createVideo(req, res, next) {
 
 async function deleteVideo(req, res, next) {
 	try {
-		return await videoService.deleteVideo(req.params);
+		return await videoService.deleteVideo(req.params.id);
 	} catch (error) {
 		next(error);
 	}
@@ -40,7 +40,9 @@ async function deleteVideo(req, res, next) {
 
 async function likeVideo(req, res, next) {
 	try {
-		return await likeService.like();
+		const userId = req.user;
+		const videoId = req.params.id;
+		return await likeService.like(userId, videoId);
 	} catch (error) {
 		next(error);
 	}
@@ -48,7 +50,9 @@ async function likeVideo(req, res, next) {
 
 async function unLikeVideo(req, res, next) {
 	try {
-		return await likeService.unLike();
+		const userId = req.user;
+		const videoId = req.params.id;
+		return await likeService.unLike(userId, videoId);
 	} catch (error) {
 		next(error);
 	}
@@ -56,7 +60,9 @@ async function unLikeVideo(req, res, next) {
 
 async function dislikeVideo(req, res, next) {
 	try {
-		return await dislikeService.dislike();
+		const userId = req.user;
+		const videoId = req.params.id;
+		return await dislikeService.dislike(userId, videoId);
 	} catch (error) {
 		next(error);
 	}
@@ -64,7 +70,9 @@ async function dislikeVideo(req, res, next) {
 
 async function unDislikeVideo(req, res, next) {
 	try {
-		return await dislikeService.unDislike();
+		const userId = req.user;
+		const videoId = req.params.id;
+		return await dislikeService.unDislike(userId, videoId);
 	} catch (error) {
 		next(error);
 	}
@@ -72,7 +80,7 @@ async function unDislikeVideo(req, res, next) {
 
 async function getLikeAndDisLike(req, res, next) {
 	try {
-		const videoId = req.body.videoId;
+		const videoId = req.params.id;
 		const likes = await likeService.countLike(videoId);
 		const dislikes = await dislikeService.countDislike(videoId);
 		return res.json({ likes, dislikes });
