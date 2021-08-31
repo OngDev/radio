@@ -1,6 +1,9 @@
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const jwtAuthz = require('express-jwt-authz');
+const { get } = require('../configs/env.config');
+
+const domain = get('domain');
 
 const checkJwt = jwt({
 	// Dynamically provide a signing key
@@ -10,12 +13,12 @@ const checkJwt = jwt({
 		cache: true,
 		rateLimit: true,
 		jwksRequestsPerMinute: 5,
-		jwksUri: `https://YOUR_DOMAIN/.well-known/jwks.json`,
+		jwksUri: `https://${domain}/.well-known/jwks.json`,
 	}),
 
 	// Validate the audience and the issuer.
 	audience: 'YOUR_API_IDENTIFIER',
-	issuer: [`https://YOUR_DOMAIN/`],
+	issuer: [`https://${domain}`],
 	algorithms: ['RS256'],
 });
 
