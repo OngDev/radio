@@ -1,36 +1,17 @@
-const fs = require('fs');
-const joi = require('joi');
-const { parse } = require('dotenv');
 const dotenv = require('dotenv');
-const path = require('path');
 
-const envPath = path.join(__dirname, '../', '.env');
 dotenv.config();
 
-function checkEnv(envConfig) {
-	const envSchema = joi
-		.object({
-			// app
-			NODE_ENV: joi.string().valid('dev', 'prod').default('dev'),
-			PORT: joi.number().default(8080),
-			HOST: joi.string().uri().default('http://localhost'),
-			// db
-			MONGO_URI: joi
-				.string()
-				.regex(/^mongodb/)
-				.default('mongodb://localhost:27017/Radio'),
-		})
-		.unknown(true);
+const { NODE_ENV, MONGO_URI, PORT } = process.env;
 
-	const { error, value } = envSchema.validate(envConfig);
-	if (error) throw new Error(`ENV validation error: ${error.message}`);
-	return value;
+const config = {
+    NODE_ENV: NODE_ENV || 'dev',
+    MONGO_URI: MONGO_URI || 'mongodb://localhost:27017/Radio',
+    PORT: PORT || 4000,
 }
 
 function get(key) {
-	let config = parse(fs.readFileSync(envPath));
-	config = checkEnv(config);
-	return config[key.toUpperCase()];
+    return config[key.toUpperCase()];
 }
 
-module.exports = { get };
+module.exports = {get };
