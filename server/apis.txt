@@ -1,0 +1,16 @@
+// Video
+
+GET /                		| get all video
+POST /like/:id       		| like video
+DELETE /like/:id     		| unlike video
+POST /dislike/:id       | dislike video
+DELETE /dislike/:id     | undislike video
+GET /:id                | get user by id
+GET /count/:id          | get like, dislike of video
+
+
+
+// User
+
+POST /          | Create user
+GET /me         | Get user profile
