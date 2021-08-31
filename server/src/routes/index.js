@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 module.exports = () => {
 	router.get('/', function (req, res, next) {
-		res.render('index', { title: 'Auth0 Webapp sample Nodejs' });
+		res.json('Hello World!');
 	});
 	return router;
 };

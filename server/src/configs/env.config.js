@@ -10,16 +10,15 @@ dotenv.config();
 function checkEnv(envConfig) {
 	const envSchema = joi
 		.object({
+			// app
 			NODE_ENV: joi.string().valid('dev', 'prod').default('dev'),
 			PORT: joi.number().default(8080),
-			HOST: joi
-				.string()
-				.uri({ scheme: [/http?/] })
-				.default('http://localhost'),
+			HOST: joi.string().uri().default('http://localhost'),
+			// db
 			MONGO_URI: joi
 				.string()
 				.regex(/^mongodb/)
-				.default('mongodb://localhost:27017/Project1'),
+				.default('mongodb://localhost:27017/Radio'),
 		})
 		.unknown(true);
 
