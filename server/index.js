@@ -1,12 +1,12 @@
 const express = require('express');
-const { get } = require('./configs/env.config');
-const { connectDB } = require('./configs/mongo.config');
-const { handleNotFoundPage, handleError } = require('./middlewares/error.middleware');
+const { get } = require('./src/configs/env.config');
+const { connectDB } = require('./src/configs/mongo.config');
+const { handleNotFoundPage, handleError } = require('./src/middlewares/error.middleware');
 const morgan = require('morgan');
 const cors = require('cors');
-const userRoute = require('./routes/user.route');
-const videoRoutes = require('./routes/video.route');
-const indexRoutes = require('./routes/user.route');
+const userRoute = require('./src/routes/user.route');
+const videoRoutes = require('./src/routes/video.route');
+const indexRoutes = require('./src/routes/user.route');
 
 // config middleware
 const app = express();
