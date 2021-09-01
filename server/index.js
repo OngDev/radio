@@ -7,6 +7,16 @@ const cors = require('cors');
 const userRoute = require('./src/routes/user.route');
 const videoRoutes = require('./src/routes/video.route');
 const indexRoutes = require('./src/routes/user.route');
+const { auth } = require('express-openid-connect');
+
+const config = {
+    authRequired: false,
+    auth0Logout: true,
+    baseURL: get('base_url'),
+    clientID: get('client_id'),
+    issuerBaseURL: get('auth0_domain'),
+    secret: 'LONG_RANDOM_STRING'
+}
 
 // config middleware
 const app = express();
@@ -14,6 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+app.use(auth(config));
 
 // connect DB
 connectDB();
