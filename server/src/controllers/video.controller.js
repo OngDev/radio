@@ -32,7 +32,8 @@ async function createVideo(req, res, next) {
 
 async function deleteVideo(req, res, next) {
 	try {
-		return await videoService.deleteVideo(req.params.id);
+		const id = req.params.id;
+		return await videoService.deleteVideo();
 	} catch (error) {
 		next(error);
 	}

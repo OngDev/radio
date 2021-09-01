@@ -13,7 +13,7 @@ async function createUser(req, res, next) {
 async function userProfile(req, res, next) {
 	try {
 		const user = req.user;
-		return res.json({ user });
+		return res.json(user);
 	} catch (error) {
 		next(error);
 	}
