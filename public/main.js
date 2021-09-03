@@ -15,7 +15,7 @@ const updateUI = async() => {
     const isAuthenticated = nickname && picture;
 
     document.getElementById("btn-login").style.visibility = isAuthenticated ? 'hidden' : 'visible';
-    document.getElementById("btn-logout").style.visibility = isAuthenticated ? 'visible' : 'hidden';
+    document.getElementById("btn-logout").style.display = isAuthenticated ? 'block' : 'none';
 
     if (nickname && picture) {
         fullName.innerHTML = nickname;
