@@ -13,8 +13,8 @@ async function createUser(req, res, next) {
 
 async function userProfile(req, res, next) {
     try {
-        const user = req.oidc.user;
-        return res.json(user);
+        const { nickname, picture } = req.oidc.user;
+        return res.json({ nickname, picture });
     } catch (error) {
         next(error);
     }
