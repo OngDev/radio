@@ -31,9 +31,11 @@
             </div>
             <!-- <button>search</button> -->
             <div class="acount">
-                <img height="40" src="logo.jpg" alt="">
-                <span>username</span>
+                <div id="full-name" style="visibility: hidden;"></div>
+                <img id="avatar" src="logo.jpg" style="visibility: hidden;" width="25px" height="25px" />
             </div>
+            <button class="btn btn-info" id="btn-login" onclick="window.location='/login'">Login</button>
+            <button class="btn btn-info" id="btn-logout" onclick="window.location='/logout'">Logout</button>
         </header>
         <main>
             <div class="row col-md-12 video">
