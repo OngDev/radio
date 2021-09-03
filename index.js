@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const userRoute = require('./src/routes/user.route');
 const videoRoutes = require('./src/routes/video.route');
 const { auth } = require('express-openid-connect');
+const path = require('path');
 
 const config = {
     authRequired: false,
@@ -13,7 +14,7 @@ const config = {
     baseURL: get('base_url'),
     clientID: get('client_id'),
     issuerBaseURL: get('auth0_domain'),
-    secret: 'LONG_RANDOM_STRING'
+    secret: 'LONG_RANDOM_STRING',
 }
 
 // config middleware
@@ -37,6 +38,10 @@ app.get("/login", (req, res) => {
 app.get("/logout", (req, res) => {
     req.oidc.logout()
 });
+
+app.get('/search', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/search.html'))
+})
 
 // handler error
 app.use(handleNotFoundPage);
