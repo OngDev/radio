@@ -106,19 +106,25 @@ async function init() {
     let element = "";
     videoList = resposne;
     videoList.map((res) => {
-      element += `<div class="item-video">
-            <img
-              src="https://i.ytimg.com/vi/v3KGcyncXj8/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDQnfzl1FDNNWAUfgjhMY0wZYRiug"
-              alt=""
-            />
-            <div class="meta">
-              <span class="title">${res.title}</span>
-              <div class="meta__icon">
-                <i class="like far fa-thumbs-up"></i><span id="like${res._id}">0</span>
-                <i class="dislike far fa-thumbs-down"></i><span id="dislike${res._id}">0</span>
+      element += `<div id="item-video">
+          <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
+          <div id="video-detail">
+              <h5 class="title" style="color: #ffb347">${res.title}</h5>
+              <small class="author">Chillhop Music</small>
+              <p>1,1 Tr lượt xem</p>
+              <div id="video-detail-icon">
+                  <div>
+                      <i class="like fas fa-thumbs-up"></i> <span id="like${res._id}">0</span>
+                      <i class="dislike fas fa-thumbs-down"></i> <span id="dislike${res._id}">0</span>
+                  </div>
+                  <div>
+                      <i class="vote fas fa-long-arrow-alt-up"></i>
+                      <strong>100</strong>
+                      <i class="disvote fas fa-long-arrow-alt-up"></i>
+                  </div>
               </div>
-            </div>
-          </div>`;
+          </div>
+      </div>`;
     });
     document.getElementById("list-video").innerHTML = element;
   });
