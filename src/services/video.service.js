@@ -47,10 +47,26 @@ async function searchYoutube(keyword) {
     }
 }
 
+async function initPlaylist() {
+    const videos = await Video.find().populate('Likes').populate('Dislikes');
+    console.log(videos);
+    const sortedVideos = videos.sort((a, b) => {
+
+    });
+    console.log(sortedVideos);
+    for (let i = 0; i < sortedVideos.length; i++) {
+        await Video.findByIdAndUpdate(sortedVideos[i].id, {
+            order: i
+        });
+    }
+    console.log('Finished initiating playlist')
+}
+
 module.exports = {
     getVideoById,
     getAll,
     createVideo,
     deleteVideo,
-    searchYoutube
+    searchYoutube,
+    initPlaylist
 };

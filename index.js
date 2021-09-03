@@ -7,6 +7,7 @@ const userRoute = require('./src/routes/user.route');
 const videoRoutes = require('./src/routes/video.route');
 const { auth } = require('express-openid-connect');
 const path = require('path');
+const { initPlaylist } = require('./src/services/video.service');
 
 const config = {
     authRequired: false,
@@ -28,6 +29,8 @@ app.use(express.static('public'))
 // connect DB
 connectDB();
 
+initPlaylist()
+
 // config routes
 app.use('/video', videoRoutes());
 app.use('/user', userRoute());
@@ -36,7 +39,7 @@ app.get("/login", (req, res) => {
     res.oidc.login();
 });
 app.get("/logout", (req, res) => {
-    req.oidc.logout()
+    req.oidc.logout();
 });
 
 app.get('/search', (req, res) => {
