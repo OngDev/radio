@@ -12,4 +12,17 @@ const videoSchema = new Schema({
 }, { timestamps: true, versionKey: false });
 
 const Video = mongoose.model('Videos', videoSchema);
+
+videoSchema.virtual('dislikes', {
+    ref: 'Dislikes',
+    localField: '_id',
+    foreignField: 'videoId',
+})
+
+videoSchema.virtual('likes', {
+    ref: 'Likes',
+    localField: '_id',
+    foreignField: 'videoId',
+})
+
 module.exports = Video;
