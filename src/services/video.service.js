@@ -48,7 +48,7 @@ async function searchYoutube(keyword) {
 }
 
 async function initPlaylist() {
-    const videos = await Video.find().populate('Likes').populate('Dislikes');
+    const videos = await Video.find().populate('likes').populate('dislikes');
     console.log(videos);
     const sortedVideos = videos.sort((a, b) => {
 
@@ -59,7 +59,7 @@ async function initPlaylist() {
             order: i
         });
     }
-    console.log('Finished initiating playlist')
+    console.log('Finished initiating playlist');
 }
 
 module.exports = {
