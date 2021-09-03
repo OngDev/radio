@@ -23,8 +23,7 @@ async function getAll(req, res, next) {
 
 async function createVideo(req, res, next) {
     try {
-        console.log(req.oidc.user)
-        const video = await videoService.createVideo(req.body, req.oidc.user);
+        const video = await videoService.createVideo({...req.body, authorEmail: req.oidc.user.email });
         return res.json(video);
     } catch (error) {
         next(error);
@@ -33,8 +32,12 @@ async function createVideo(req, res, next) {
 
 async function deleteVideo(req, res, next) {
     try {
-        const id = req.params.id;
-        return await videoService.deleteVideo();
+        const { email } = req.oidc.user;
+        if (email !== 'milonguyen95@outlook.com' || email !== 'admin@ongdev.com') {
+            return res.status(401).end();
+        }
+        const videoId = req.params.id;
+        return await videoService.deleteVideo(videoId);
     } catch (error) {
         next(error);
     }
@@ -42,9 +45,8 @@ async function deleteVideo(req, res, next) {
 
 async function likeVideo(req, res, next) {
     try {
-        const userId = req.user;
         const videoId = req.params.id;
-        return await likeService.like(userId, videoId);
+        return await likeService.like(req.oidc.user.email, videoId);
     } catch (error) {
         next(error);
     }
@@ -52,9 +54,8 @@ async function likeVideo(req, res, next) {
 
 async function unLikeVideo(req, res, next) {
     try {
-        const userId = req.user;
         const videoId = req.params.id;
-        return await likeService.unLike(userId, videoId);
+        return await likeService.unLike(req.oidc.user.email, videoId);
     } catch (error) {
         next(error);
     }
@@ -62,9 +63,8 @@ async function unLikeVideo(req, res, next) {
 
 async function dislikeVideo(req, res, next) {
     try {
-        const userId = req.user;
         const videoId = req.params.id;
-        return await dislikeService.dislike(userId, videoId);
+        return await dislikeService.dislike(req.oidc.user.email, videoId);
     } catch (error) {
         next(error);
     }

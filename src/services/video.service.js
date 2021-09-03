@@ -19,7 +19,7 @@ async function getAll() {
     }
 }
 
-async function createVideo(video, user) {
+async function createVideo(video) {
     try {
         return await Video.create({ _id: Types.ObjectId(), ...video });
     } catch (error) {
