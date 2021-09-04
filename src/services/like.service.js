@@ -1,32 +1,27 @@
-const { Types } = require('mongoose');
-const Like = require('../models/like.model');
+import mongoose from 'mongoose';
+const { Schema: { Types } } = mongoose;
+import LikeModel from '../models/like.model.js';
 
-async function like(authorEmail, videoId) {
+export async function like(authorEmail, videoId) {
     try {
-        const isExist = await Like.findOne({ authorEmail, videoId });
+        const isExist = await LikeModel.findOne({ authorEmail, videoId });
         if (isExist) return;
-        return await Like.create({ _id: Types.ObjectId(), authorEmail, videoId });
+        return await create({ _id: Types.ObjectId(), authorEmail, videoId });
     } catch (error) {
         throw error;
     }
 }
 
-async function unLike(authorEmail, videoId) {
-    const like = await Like.findOne({ authorEmail, videoId });
+export async function unLike(authorEmail, videoId) {
+    const like = await LikeModel.findOne({ authorEmail, videoId });
     if (!like) return;
-    return Like.deleteOne({ videoId, authorEmail });
+    return LikeModel.deleteOne({ videoId, authorEmail });
 }
 
-async function countLike(videoId) {
+export async function countLike(videoId) {
     try {
-        return await Like.count({ videoId });
+        return await LikeModel.count({ videoId });
     } catch (error) {
         throw error;
     }
 }
-
-module.exports = {
-    like,
-    unLike,
-    countLike,
-};

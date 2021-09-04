@@ -1,12 +1,15 @@
-const express = require('express');
-const { get } = require('./src/configs/env.config');
-const { connectDB } = require('./src/configs/mongo.config');
-const { handleNotFoundPage, handleError } = require('./src/middlewares/error.middleware');
-const morgan = require('morgan');
-const userRoute = require('./src/routes/user.route');
-const videoRoutes = require('./src/routes/video.route');
-const { auth } = require('express-openid-connect');
-const path = require('path');
+import express from 'express';
+import get from './src/configs/env.config.js';
+import { connectDB } from './src/configs/mongo.config.js';
+import { handleNotFoundPage, handleError } from './src/middlewares/error.middleware.js';
+import morgan from 'morgan';
+import userRoute from './src/routes/user.route.js';
+import videoRoutes from './src/routes/video.route.js';
+import { getPlayingVideo } from './src/services/video.service.js';
+import { auth } from 'express-openid-connect';
+import { join } from 'path';
+import { createServer } from 'http';
+import { Server } from "socket.io";
 
 const config = {
     authRequired: false,
@@ -19,6 +22,16 @@ const config = {
 
 // config middleware
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+io.on('connection', (client) => {
+    const { playingVideo, playedTime } = getPlayingVideo();
+    client.emit('playingVideo', {
+        playingVideo,
+        playedTime
+    });
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -36,11 +49,11 @@ app.get("/login", (req, res) => {
     res.oidc.login();
 });
 app.get("/logout", (req, res) => {
-    req.oidc.logout()
+    req.oidc.logout();
 });
 
 app.get('/search', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/search.html'))
+    res.sendFile(join(__dirname, '/public/search.html'))
 })
 
 // handler error
@@ -49,4 +62,7 @@ app.use(handleError);
 
 // start app
 const port = get('port');
-app.listen(port, () => console.log(`Server start at port ${port}`));
+
+httpServer.listen(port, () => console.log(`Server start at port ${port}`));
+
+export default io;

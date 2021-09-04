@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="style.css">
-
-    <script type="text/javascript" src="main.js"></script>
 </head>
 
 <body>
@@ -39,7 +37,7 @@
                     <button class="btn btn-light" id="btn-login" onclick="window.location='/login'">
               Login
             </button>
-                    <button class="btn btn-black d-none" id="btn-logout" onclick="window.location='/logout'">
+                    <button class="btn btn-dark" id="btn-logout" onclick="window.location='/logout'">
               Logout
             </button>
                 </div>
@@ -62,8 +60,9 @@
                             <span>www.ongdev.com</span>
                         </a>
                     </div>
-                    <iframe id="video-iframe" src="https://www.youtube.com/embed/Fe24TsFzQ2Y?controls=0&autoplay=1" frameborder="0" allowfullscreen>
-            </iframe>
+                    <div id="videoPlaying"></div>
+                    <!-- <iframe id="video-iframe" src="https://www.youtube.com/embed/Fe24TsFzQ2Y?controls=0&autoplay=1" frameborder="0" allowfullscreen> -->
+                    </iframe>
                     <div id="video-content">
                         <h4>Ông Dev coi cái chợ code | ODRadio #1 | #ODLive</h4>
                         <div id="video-react">
@@ -82,7 +81,7 @@
             </div>
             <div id="list-video">
                 <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
+                    <!-- <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
                     <div id="video-detail">
                         <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
                         <small class="author">Chillhop Music</small>
@@ -98,7 +97,7 @@
                                 <i class="disvote fas fa-long-arrow-alt-up"></i>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div id="item-video">
                     <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
@@ -211,14 +210,18 @@
                                 <strong>100</strong>
                                 <i class="disvote fas fa-long-arrow-alt-up"></i>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </main>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script src="./video.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js" integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/" crossorigin="anonymous"></script>
 </body>
 
 </html>

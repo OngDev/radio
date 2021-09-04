@@ -1,4 +1,4 @@
-async function userProfile(req, res, next) {
+export async function userProfile(req, res, next) {
     try {
         const { nickname, picture } = req.oidc.user;
         return res.json({ nickname, picture });
@@ -6,7 +6,3 @@ async function userProfile(req, res, next) {
         next(error);
     }
 }
-
-module.exports = {
-    userProfile,
-};

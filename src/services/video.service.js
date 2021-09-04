@@ -1,56 +1,85 @@
-const axios = require('axios');
-const { get } = require('../configs/env.config');
-const { Types } = require('mongoose');
-const Video = require('../models/video.model');
+import VideoModel from '../models/video.model.js';
+import { getYoutubeVideo } from './youtube.service.js';
+import Queue from '../utils/queue.util.js';
+import moment from 'moment';
+const videoQueue = new Queue();
+let playingVideo = null;
+let currentVideoStartedTime = null;
+import io from '../../index.js';
 
-async function getVideoById(id) {
+setInterval(() => {
+    const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
+    if ((playingVideo === null || (playedTime > playingVideo.duration)) && videoQueue.size() > 0) {
+        console.log('Dequeue video to playing video')
+        playingVideo = videoQueue.dequeue();
+        currentVideoStartedTime = moment();
+        io.emit('playingVideo', {
+            playingVideo,
+            playedTime: 0
+        });
+    }
+    if (videoQueue.size() === 0) {
+        console.log('Playlist is empty, init new')
+        initPlaylist();
+    }
+}, 1000)
+
+export async function getVideoById(id) {
     try {
-        return await Video.findById(id);
+        return await VideoModel.findById(id);
     } catch (error) {
         throw error;
     }
 }
 
-async function getAll() {
+export async function getAll() {
     try {
-        return await Video.find();
+        return await VideoModel.find();
     } catch (error) {
         throw error;
     }
 }
 
-async function createVideo(video) {
+export async function createVideo(youtubeVideoId, authorEmail) {
     try {
-        return await Video.create({ _id: Types.ObjectId(), ...video });
+        const { title, thumbnailUrl, duration } = await getYoutubeVideo(youtubeVideoId);
+
+        return await VideoModel.create({ title, youtubeVideoId, authorEmail, duration, thumbnailUrl });
+    } catch (error) {
+        console.log(error.message)
+        throw error;
+    }
+}
+
+export async function deleteVideo(id) {
+    try {
+        return await VideoModel.findByIdAndDelete(id);
     } catch (error) {
         throw error;
     }
 }
 
-async function deleteVideo(id) {
-    try {
-        return await Video.findByIdAndDelete(id);
-    } catch (error) {
-        throw error;
+export async function initPlaylist() {
+    const videos = await VideoModel.find().populate('likes').populate('dislikes');
+    const sortedVideos = videos.sort((a, b) => {
+        const firstElementInteractions = a.likes ? a.likes.length : 0 - a.dislikes ? a.dislikes.length : 0;
+        const secondElementInteractions = b.likes ? b.likes.length : 0 - b.dislikes ? b.dislikes.length : 0;
+
+        if (firstElementInteractions < secondElementInteractions) return -1;
+        if (firstElementInteractions > secondElementInteractions) return 1;
+        return 0;
+    });
+
+    for (const video of sortedVideos) {
+        videoQueue.enqueue(video)
     }
+    //TODO: Add algo
+
+    return sortedVideos;
+
 }
 
-async function searchYoutube(keyword) {
-    try {
-        const youtubeUrl = get('youtube_api_url')
-        console.log(youtubeUrl)
-        const response = await axios.get(`${youtubeUrl}&q=${keyword}`);
-        return response.data
-    } catch (error) {
-        console.error(error.response.data)
-        throw error;
-    }
+export function getPlayingVideo() {
+    const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
+    return { playingVideo, playedTime }
 }
-
-module.exports = {
-    getVideoById,
-    getAll,
-    createVideo,
-    deleteVideo,
-    searchYoutube
-};
