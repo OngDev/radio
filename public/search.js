@@ -28,7 +28,7 @@ function renderListVideo(video) {
 			<img src="https://i.ytimg.com/vi/${item.id.videoId}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDQnfzl1FDNNWAUfgjhMY0wZYRiug" alt="">
 			<div class="meta">
 				<span class="title">${item.snippet.title}</span>
-				<button class="add-btn" onclick="createVideo('${item.snippet.title}','${item.id.videoId}')">Add</button>
+				<button class="add-btn" onclick="createVideo('${item.id.videoId}')">Add</button>
 			</div>
 		</div>
 		`;
@@ -36,12 +36,11 @@ function renderListVideo(video) {
     $('#list-video').html(videoItem);
 }
 
-async function createVideo(title, youtubeVideoId) {
+async function createVideo(youtubeVideoId) {
     axios({
         url: '/video',
         method: 'POST',
         data: {
-            title,
             youtubeVideoId,
         }
     }).then(response => {

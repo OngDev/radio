@@ -1,24 +1,25 @@
-const router = require('express').Router();
-const videoController = require('../controllers/video.controller');
-const { requiresAuth } = require('express-openid-connect');
+import { Router } from 'express';
+import openId from 'express-openid-connect';
+import { createVideo, getAll, likeVideo, unLikeVideo, dislikeVideo, unDislikeVideo, getLikeAndDisLike, searchYoutube, getById, deleteVideo } from '../controllers/video.controller.js';
 // const { checkReqParam } = require('../middlewares/validate.middleware');
 
-module.exports = () => {
-    router.route('/').post(videoController.createVideo).get(videoController.getAll);
+const router = Router();
+export default () => {
+    router.route('/').post(createVideo).get(getAll);
 
     router
         .route('/like/:id')
-        .all(requiresAuth())
-        .post(videoController.likeVideo)
-        .delete(videoController.unLikeVideo);
+        .all(openId.requiresAuth())
+        .post(likeVideo)
+        .delete(unLikeVideo);
     router
         .route('/dislike/:id')
-        .all(requiresAuth())
-        .post(videoController.dislikeVideo)
-        .delete(videoController.unDislikeVideo);
-    router.get('/count/:id', videoController.getLikeAndDisLike);
-    router.get('/search', requiresAuth(), videoController.searchYoutube);
-    router.get('/:id', videoController.getById);
-    router.delete('/:id', requiresAuth(), videoController.deleteVideo);
+        .all(openId.requiresAuth())
+        .post(dislikeVideo)
+        .delete(unDislikeVideo);
+    router.get('/count/:id', getLikeAndDisLike);
+    router.get('/search', openId.requiresAuth(), searchYoutube);
+    router.get('/:id', getById);
+    router.delete('/:id', openId.requiresAuth(), deleteVideo);
     return router;
 };

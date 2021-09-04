@@ -1,8 +1,9 @@
-const router = require('express').Router();
-const { requiresAuth } = require('express-openid-connect');
-const userController = require('../controllers/user.controller');
+import { Router } from 'express';
+import openId from 'express-openid-connect';
+import { userProfile } from '../controllers/user.controller.js';
 
-module.exports = () => {
-    router.get('/me', requiresAuth(), userController.userProfile);
+const router = Router();
+export default () => {
+    router.get('/me', openId.requiresAuth(), userProfile);
     return router;
 };

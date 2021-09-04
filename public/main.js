@@ -24,3 +24,12 @@ const updateUI = async() => {
         avatar.style.visibility = 'visible';
     }
 };
+
+const socket = io();
+socket.on("connect", () => {
+    console.log(socket.id);
+})
+
+socket.on("playingVideo", (data) => {
+    console.log(data);
+})

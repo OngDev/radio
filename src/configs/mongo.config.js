@@ -1,41 +1,39 @@
-const mongoose = require('mongoose');
-const { get } = require('./env.config');
+import mongoose from 'mongoose';
+import get from './env.config.js';
 
-mongoose.Promise = global.Promise;
+Promise = global.Promise;
 const mongoConfig = {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        ignoreUndefined: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ignoreUndefined: true,
 };
 
 const uri = get('mongo_uri');
-async function connectDB() {
-        try {
-                await mongoose.connect(uri, mongoConfig);
-                return console.log(`Connected DB !`);
-        } catch (error) {
-                throw new Error(error);
-        }
+export async function connectDB() {
+    try {
+        await mongoose.connect(uri, mongoConfig);
+        return console.log(`Connected DB !`);
+    } catch (error) {
+        throw new Error(error);
+    }
 }
-async function disconnectDB() {
-        try {
-                await mongoose.connection.close();
-                return console.log(`Disconnected DB !`);
-        } catch (error) {
-                throw new Error(error);
-        }
-}
-
-async function clearDB() {
-        try {
-                const collections = mongoose.connection.collections;
-                for (const key in collections) {
-                        const collection = collections[key];
-                        await collection.deleteMany();
-                }
-        } catch (error) {
-                throw new Error(error.message);
-        }
+export async function disconnectDB() {
+    try {
+        await mongoose.connection.close();
+        return console.log(`Disconnected DB !`);
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 
-module.exports = { mongoConfig, connectDB, disconnectDB, clearDB };
+export async function clearDB() {
+    try {
+        const collections = mongoose.connection.collections;
+        for (const key in collections) {
+            const collection = collections[key];
+            await collection.deleteMany();
+        }
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
