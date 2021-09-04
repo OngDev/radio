@@ -59,94 +59,43 @@ async function countLikeVideo(id) {
   return result.data;
 }
 
-function like(id) {
-  likeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function like(id) {
+  await likeVideo(id);
+  updateCount(id);
 }
 
-function unlike(id) {
-  unlikeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function unlike(id) {
+  await unlikeVideo(id);
+  updateCount(id);
 }
 
-function dislike(id) {
-  dislikeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function dislike(id) {
+  await dislikeVideo(id);
+  updateCount(id);
 }
 
-function unDislike(id) {
-  unDislikeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function unDislike(id) {
+  await unDislikeVideo(id);
+  updateCount(id);
 }
 
 async function init() {
   await getAll().then((resposne) => {
-    console.log(resposne);
+    // console.log(resposne);
     if (resposne.length == 0) return console.log("Empty");
     let element = "";
     videoList = resposne;
     videoList.map((res) => {
-      element += `<div class="item-video">
-            <img
-              src="https://i.ytimg.com/vi/v3KGcyncXj8/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDQnfzl1FDNNWAUfgjhMY0wZYRiug"
-              alt=""
-            />
-            <div class="meta">
-              <span class="title">${res.title}</span>
-              <div class="meta__icon">
-                <i class="like far fa-thumbs-up"></i><span id="like${res._id}">0</span>
-                <i class="dislike far fa-thumbs-down"></i><span id="dislike${res._id}">0</span>
-              </div>
-            </div>
-          </div>`;
+      element += `<div id="item-video">
+          <img class="rounded" src="${res.thumbnailUrl}" width="200" height="100%" />
+          <div id="video-detail">
+              <h5 class="title" style="color: #ffb347">${res.title}</h5>
+              <small class="author">Add by: ${res.authorEmail}</small>
+              <p>${res.views} lượt xem</p>
+          </div>
+      </div>`;
     });
     document.getElementById("list-video").innerHTML = element;
-  });
-
-  if (videoList.length == 0) return;
-
-  videoPlaying = videoList[0];
-
-  await getById(videoPlaying._id).then((response) => {
-    console.log(response);
-    let element = `<iframe
-          id="video-iframe"
-          width="420"
-          src="https://www.youtube.com/embed/${response.youtubeVideoId}?controls=0&autoplay=1"
-          frameborder="0"
-          allow="accelerometer; autoplay; modestbranding; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-      >
-      </iframe>`;
-    document.getElementById("videoPlaying").innerHTML = element;
-  });
-
-  await countLikeVideo(videoPlaying._id).then((response) => {
-    // console.log(response);
-    document.getElementById("like" + videoPlaying._id).innerHTML =
-      response.likes;
-    document.getElementById("dislike" + videoPlaying._id).innerHTML =
-      response.dislikes;
   });
 }
 

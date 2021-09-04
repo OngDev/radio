@@ -43,9 +43,10 @@ async function createVideo(youtubeVideoId) {
         data: {
             youtubeVideoId,
         }
-    }).then(response => {
-        console.log(response)
+    }).then(() => {
+        console.log('Success')
     }).catch(error => {
         console.error(error.response.data.message)
+        alert(error.response.data.message)
     })
 }
