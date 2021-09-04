@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
-const { Schema: { Types } } = mongoose;
+// import mongoose from 'mongoose';
+// const { Schema: { Types } } = mongoose;
 import DislikeModel from '../models/dislike.model.js';
 
 export async function dislike(authorEmail, videoId) {
     try {
         const isExist = await DislikeModel.findOne({ authorEmail, videoId });
-        if (isExist) return;
-        return await DislikeModel.create({ _id: Types.ObjectId(), authorEmail, videoId });
+        if (isExist) throw 'Disliked';
+        return await DislikeModel.create({ authorEmail, videoId });
     } catch (error) {
         throw error;
     }

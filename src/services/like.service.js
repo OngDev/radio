@@ -5,8 +5,8 @@ import LikeModel from '../models/like.model.js';
 export async function like(authorEmail, videoId) {
     try {
         const isExist = await LikeModel.findOne({ authorEmail, videoId });
-        if (isExist) return;
-        return await create({ _id: Types.ObjectId(), authorEmail, videoId });
+        if (isExist)  throw 'Liked';
+        return await LikeModel.create({ authorEmail, videoId });
     } catch (error) {
         throw error;
     }

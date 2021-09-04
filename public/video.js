@@ -59,14 +59,10 @@ async function countLikeVideo(id) {
   return result.data;
 }
 
-function like(id) {
-  likeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function like(id) {
+  let currentLike = document.getElementById("likeCount").innerText;
+  await likeVideo(id);
+  document.getElementById("likeCount").innerText = Number(currentLike) + 1;
 }
 
 function unlike(id) {
@@ -79,14 +75,11 @@ function unlike(id) {
     });
 }
 
-function dislike(id) {
-  dislikeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function dislike(id) {
+  let currentDislike = document.getElementById("dislikeCount").innerText;
+  await dislikeVideo(id);
+  document.getElementById("dislikeCount").innerText =
+    Number(currentDislike) + 1;
 }
 
 function unDislike(id) {
@@ -101,7 +94,7 @@ function unDislike(id) {
 
 async function init() {
   await getAll().then((resposne) => {
-    console.log(resposne);
+    // console.log(resposne);
     if (resposne.length == 0) return console.log("Empty");
     let element = "";
     videoList = resposne;
@@ -127,32 +120,6 @@ async function init() {
       </div>`;
     });
     document.getElementById("list-video").innerHTML = element;
-  });
-
-  if (videoList.length == 0) return;
-
-  videoPlaying = videoList[0];
-
-  await getById(videoPlaying._id).then((response) => {
-    console.log(response);
-    let element = `<iframe
-          id="video-iframe"
-          width="420"
-          src="https://www.youtube.com/embed/${response.youtubeVideoId}?controls=0&autoplay=1"
-          frameborder="0"
-          allow="accelerometer; autoplay; modestbranding; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-      >
-      </iframe>`;
-    document.getElementById("videoPlaying").innerHTML = element;
-  });
-
-  await countLikeVideo(videoPlaying._id).then((response) => {
-    // console.log(response);
-    document.getElementById("like" + videoPlaying._id).innerHTML =
-      response.likes;
-    document.getElementById("dislike" + videoPlaying._id).innerHTML =
-      response.dislikes;
   });
 }
 

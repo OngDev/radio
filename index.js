@@ -10,6 +10,9 @@ import { auth } from 'express-openid-connect';
 import { join } from 'path';
 import { createServer } from 'http';
 import { Server } from "socket.io";
+import path from 'path'
+
+const __dirname = path.resolve()
 
 const config = {
     authRequired: false,
@@ -51,6 +54,7 @@ app.get("/login", (req, res) => {
 app.get("/logout", (req, res) => {
     req.oidc.logout();
 });
+
 
 app.get('/search', (req, res) => {
     res.sendFile(join(__dirname, '/public/search.html'))

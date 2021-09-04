@@ -64,12 +64,13 @@
                     <!-- <iframe id="video-iframe" src="https://www.youtube.com/embed/Fe24TsFzQ2Y?controls=0&autoplay=1" frameborder="0" allowfullscreen> -->
                     </iframe>
                     <div id="video-content">
-                        <h4>Ông Dev coi cái chợ code | ODRadio #1 | #ODLive</h4>
+                        <h4 id="titlePlayingVideo">Ông Dev coi cái chợ code | ODRadio #1 | #ODLive</h4>
                         <div id="video-react">
-                            <div class="d-inline-flex justify-content-between">
-                                <h5><i class="like fas fa-thumbs-up"></i> Like</h5>
-                                <h5><i class="dislike fas fa-thumbs-down"></i> Dislike</h5>
-                            </div>
+                            <div id="reactLike"></div>
+                            <!-- <div class="d-inline-flex justify-content-between">
+                                <h5><i class="like fas fa-thumbs-up"></i><span id="playingVideoLikes">0</span></span> Like</h5>
+                                <h5><i class="dislike fas fa-thumbs-down"></i><span id="playingVideoDislikes">0</span></span> Dislike</h5>
+                            </div> -->
                             <div class="d-inline-flex">
                                 <h5><i class="vote fas fa-long-arrow-alt-up"></i></h5>
                                 <h5 class="mx-1">100</h5>
@@ -80,26 +81,7 @@
                 </div>
             </div>
             <div id="list-video">
-                <div id="item-video">
-                    <!-- <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-                <div id="item-video">
+                <!-- <div id="item-video">
                     <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
                     <div id="video-detail">
                         <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
@@ -210,9 +192,28 @@
                                 <strong>100</strong>
                                 <i class="disvote fas fa-long-arrow-alt-up"></i>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
+                <div id="item-video">
+                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
+                    <div id="video-detail">
+                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
+                        <small class="author">Chillhop Music</small>
+                        <p>1,1 Tr lượt xem</p>
+                        <div id="video-detail-icon">
+                            <div>
+                                <i class="like fas fa-thumbs-up"></i>
+                                <i class="dislike fas fa-thumbs-down"></i>
+                            </div>
+                            <div>
+                                <i class="vote fas fa-long-arrow-alt-up"></i>
+                                <strong>100</strong>
+                                <i class="disvote fas fa-long-arrow-alt-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
         </main>
     </div>
