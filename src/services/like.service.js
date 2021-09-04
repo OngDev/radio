@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-const { Schema: { Types } } = mongoose;
+// import mongoose from 'mongoose';
+// const { Schema: { Types } } = mongoose;
 import LikeModel from '../models/like.model.js';
 
 export async function like(authorEmail, videoId) {
@@ -14,13 +14,13 @@ export async function like(authorEmail, videoId) {
 
 export async function unLike(authorEmail, videoId) {
     const like = await LikeModel.findOne({ authorEmail, videoId });
-    if (!like) return;
+    if (!like) throw 'Liked';
     return LikeModel.deleteOne({ videoId, authorEmail });
 }
 
 export async function countLike(videoId) {
     try {
-        return await LikeModel.count({ videoId });
+        return await LikeModel.find({ videoId });
     } catch (error) {
         throw error;
     }

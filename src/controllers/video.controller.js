@@ -57,7 +57,8 @@ export async function likeVideo(req, res, next) {
 export async function unLikeVideo(req, res, next) {
     try {
         const videoId = req.params.id;
-        return await unLike(req.oidc.user.email, videoId);
+        await unLike(req.oidc.user.email, videoId);
+        res.send('Sucess')
     } catch (error) {
         next(error);
     }
@@ -77,7 +78,8 @@ export async function unDislikeVideo(req, res, next) {
     try {
         const userId = req.user;
         const videoId = req.params.id;
-        return await unDislike(userId, videoId);
+        await unDislike(userId, videoId);
+        res.send('Sucess')
     } catch (error) {
         next(error);
     }

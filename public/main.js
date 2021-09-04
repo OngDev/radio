@@ -30,20 +30,37 @@ socket.on("connect", () => {
     // console.log(socket.id);
 })
 
-socket.on("playingVideo", (data) => {
+socket.on("playingVideo", async (data) => {
     // console.log(data);
     if (data.playingVideo) {
-        let elementPlayingVideo = `<iframe id="video-iframe" src="https://www.youtube.com/embed/${data.playingVideo.youtubeVideoId}?start=${data.playedTime}" frameborder="0" allowfullscreen>`
+        let elementPlayingVideo = `<iframe id="video-iframe" src="https://www.youtube.com/embed/${data.playingVideo.youtubeVideoId}?autoplay=1&start=${data.playedTime}" allow="autoplay" allowfullscreen>`
         // let elementPlayingVideo = `<iframe id="video-iframe" src="https://youtu.be/${data.playingVideo.youtubeVideoId}?t=${data.playedTime}" frameborder="0" allowfullscreen>`
         document.getElementById('videoPlaying').innerHTML = elementPlayingVideo
         document.getElementById('titlePlayingVideo').innerHTML = `<h4>${data.playingVideo.title}</h4>`
-        countLikeVideo(data.playingVideo._id).then((response) => {
-            // console.log(response);
-            let elementReactLike = `<div class="d-inline-flex justify-content-between">
-                <h5><i class="like fas fa-thumbs-up" onclick="like('${data.playingVideo._id}')"></i> <span id="likeCount">${response.likes}</span> Like</h5>
-                <h5><i class="dislike fas fa-thumbs-down" onclick="dislike('${data.playingVideo._id}')"></i> <span id="dislikeCount">${response.dislikes}</span> Dislike</h5>
-            </div>`;
-            document.getElementById("reactLike").innerHTML = elementReactLike;
-          });
+        updateCount(data.playingVideo._id)
     }
 })
+
+function updateCount(id) {
+    countLikeVideo(id).then(async (response) => {
+        const user = await axios.get(`/user/me`);
+        const { email } = user.data;
+        let elementLike = ""
+        let elementDislike = ""
+        if (response.likes.findIndex(x => x.authorEmail == email) >= 0) {
+            elementLike = `<h5><i class="like fas fa-thumbs-up" onclick="unlike('${id}')"></i> <span id="likeCount">${response.likes.length}</span> Like</h5>`
+        }
+        else elementLike = `<h5><i class="like fas fa-thumbs-up" onclick="like('${id}')"></i> <span id="likeCount">${response.likes.length}</span> Like</h5>`
+    
+        if (response.dislikes.findIndex(x => x.authorEmail == email) >= 0) {
+            elementDislike = `<h5><i class="dislike fas fa-thumbs-down" onclick="unDislike('${id}')"></i> <span id="dislikeCount">${response.dislikes.length}</span> Dislike</h5>`
+        }
+        else elementDislike = `<h5><i class="dislike fas fa-thumbs-down" onclick="dislike('${id}')"></i> <span id="dislikeCount">${response.dislikes.length}</span> Dislike</h5>`
+
+        let elementReactLike = `<div class="d-inline-flex justify-content-between">
+            ${elementLike}
+            ${elementDislike}
+        </div>`;
+        document.getElementById("reactLike").innerHTML = elementReactLike;
+    });
+}

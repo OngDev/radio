@@ -14,13 +14,13 @@ export async function dislike(authorEmail, videoId) {
 
 export async function unDislike(authorEmail, videoId) {
     const like = await DislikeModel.findOne({ authorEmail, videoId });
-    if (!like) return;
+    if (!like) throw 'Undisliked';
     return DislikeModel.deleteOne({ videoId, authorEmail });
 }
 
 export async function countDislike(videoId) {
     try {
-        return await DislikeModel.count({ videoId });
+        return await DislikeModel.find({ videoId });
     } catch (error) {
         throw error;
     }

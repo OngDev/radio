@@ -60,36 +60,23 @@ async function countLikeVideo(id) {
 }
 
 async function like(id) {
-  let currentLike = document.getElementById("likeCount").innerText;
   await likeVideo(id);
-  document.getElementById("likeCount").innerText = Number(currentLike) + 1;
+  updateCount(id);
 }
 
-function unlike(id) {
-  unlikeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function unlike(id) {
+  await unlikeVideo(id);
+  updateCount(id);
 }
 
 async function dislike(id) {
-  let currentDislike = document.getElementById("dislikeCount").innerText;
   await dislikeVideo(id);
-  document.getElementById("dislikeCount").innerText =
-    Number(currentDislike) + 1;
+  updateCount(id);
 }
 
-function unDislike(id) {
-  unDislikeVideo(id)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+async function unDislike(id) {
+  await unDislikeVideo(id);
+  updateCount(id);
 }
 
 async function init() {
@@ -100,22 +87,11 @@ async function init() {
     videoList = resposne;
     videoList.map((res) => {
       element += `<div id="item-video">
-          <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
+          <img class="rounded" src="${res.thumbnailUrl}" width="200" height="100%" />
           <div id="video-detail">
               <h5 class="title" style="color: #ffb347">${res.title}</h5>
-              <small class="author">Chillhop Music</small>
-              <p>1,1 Tr lượt xem</p>
-              <div id="video-detail-icon">
-                  <div>
-                      <i class="like fas fa-thumbs-up"></i> <span id="like${res._id}">0</span>
-                      <i class="dislike fas fa-thumbs-down"></i> <span id="dislike${res._id}">0</span>
-                  </div>
-                  <div>
-                      <i class="vote fas fa-long-arrow-alt-up"></i>
-                      <strong>100</strong>
-                      <i class="disvote fas fa-long-arrow-alt-up"></i>
-                  </div>
-              </div>
+              <small class="author">Add by: ${res.authorEmail}</small>
+              <p>${res.views} lượt xem</p>
           </div>
       </div>`;
     });
