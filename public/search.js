@@ -1,6 +1,6 @@
 /** @format */
 const form = document.querySelector('#form-search');
-const searchValue = document.querySelector('#search-video');
+const searchValue = document.querySelector('#form-search-input');
 
 searchValue.oninput = (e) => {
     searchValue.value = e.target.value;
@@ -15,6 +15,8 @@ const searchVideo = async(value) => {
         console.error(error.message)
     }
 };
+
+
 form.onsubmit = async(e) => {
     e.preventDefault();
     await searchVideo(searchValue.value);
