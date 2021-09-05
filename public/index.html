@@ -2,14 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OD Radio</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio</title>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="icon" type="image/png" href="logo.jpg" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="style.css">
 </head>
@@ -29,7 +30,7 @@
                 <button type="button" class="btn btn-light" id="btn-search" onclick="window.location='/search'">
             <i class="fas fa-search"></i> Search
           </button>
-                <div id="acount" style="display: none">
+                <div class="acount" style="display: none; visibility: hidden">
                     <div id="full-name"></div>
                     <img id="avatar" src="logo.jpg" style="visibility: hidden" width="25px" height="25px" />
                 </div>
@@ -60,298 +61,24 @@
                             <span>www.ongdev.com</span>
                         </a>
                     </div>
-                    <div id="video-iframe">
-                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/Fe24TsFzQ2Y?controls=0&autoplay=1" frameborder="0" allowfullscreen>
-              </iframe>
-                    </div>
+                    <div id="videoPlaying"></div>
                     <div id="video-content">
-                        <h4>Ông Dev coi cái chợ code | ODRadio #1 | #ODLive</h4>
+                        <h4 id="titlePlayingVideo">Ông Dev coi cái chợ code | ODRadio #1 | #ODLive</h4>
                         <div id="video-react">
-                            <div class="d-inline-flex justify-content-between">
-                                <h5><i class="like fas fa-thumbs-up"></i> Like</h5>
-                                <h5><i class="dislike fas fa-thumbs-down"></i> Dislike</h5>
-                            </div>
+                            <div id="reactLike"></div>
                             <div class="d-inline-flex">
                                 <h5><i class="vote fas fa-long-arrow-alt-up"></i></h5>
                                 <h5 class="mx-1">100</h5>
                                 <h5><i class="disvote fas fa-long-arrow-alt-up"></i></h5>
                             </div>
+                            <button onclick="changeMute()">Mute/Unmute</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="list-video">
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                    </nav>
-                    <main>
-                        <div id="main-video">
-                            <div id="video">
-                                <div id="video-social">
-                                    <a href="https://www.youtube.com/c/%C3%94ngDev" target="_blank">
-                                        <i class="fab fa-youtube" style="color: #bf0000"></i>
-                                        <span>www.youtube.com/ongdev</span>
-                                    </a>
-                                    <a href="https://www.facebook.com/ongdevvuitinh" target="_blank">
-                                        <i class="fab fa-facebook-square" style="color: #4267b2"></i>
-                                        <span>www.facebook.com/ongdevvuitinh</span>
-                                    </a>
-                                    <a href="https://ongdev.com/" target="_blank">
-                                        <img src="/images/ongdev_icon.png" alt="icon" height="30px" />
-                                        <span>www.ongdev.com</span>
-                                    </a>
-                                </div>
-                                <div id="videoPlaying"></div>
-                                <!-- <iframe id="video-iframe" src="https://www.youtube.com/embed/Fe24TsFzQ2Y?controls=0&autoplay=1" frameborder="0" allowfullscreen> -->
-                                </iframe>
-                                <div id="video-content">
-                                    <h4 id="titlePlayingVideo">Ông Dev coi cái chợ code | ODRadio #1 | #ODLive</h4>
-                                    <div id="video-react">
-                                        <div id="reactLike"></div>
-                                        <!-- <div class="d-inline-flex justify-content-between">
-                                <h5 id="elementLike"><i class="like fas fa-thumbs-up"></i><span id="playingVideoLikes">0</span></span> Like</h5>
-                                <h5 id="elementDislike"><i class="dislike fas fa-thumbs-down"></i><span id="playingVideoDislikes">0</span></span> Dislike</h5>
-                            </div> -->
-                                        <div class="d-inline-flex">
-                                            <h5><i class="vote fas fa-long-arrow-alt-up"></i></h5>
-                                            <h5 class="mx-1">100</h5>
-                                            <h5><i class="disvote fas fa-long-arrow-alt-up"></i></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div id="list-video">
-                    <!-- <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="item-video">
-                    <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                    <div id="video-detail">
-                        <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                        <small class="author">Chillhop Music</small>
-                        <p>1,1 Tr lượt xem</p>
-                        <div id="video-detail-icon">
-                            <div>
-                                <i class="like fas fa-thumbs-up"></i>
-                                <i class="dislike fas fa-thumbs-down"></i>
-                            </div>
-                            <div>
-                                <i class="vote fas fa-long-arrow-alt-up"></i>
-                                <strong>100</strong>
-                                <i class="disvote fas fa-long-arrow-alt-up"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                </div>
             </div>
-            <div id="item-video">
-                <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                <div id="video-detail">
-                    <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                    <small class="author">Chillhop Music</small>
-                    <p>1,1 Tr lượt xem</p>
-                    <div id="video-detail-icon">
-                        <div>
-                            <i class="like fas fa-thumbs-up"></i>
-                            <i class="dislike fas fa-thumbs-down"></i>
-                        </div>
-                        <div>
-                            <i class="vote fas fa-long-arrow-alt-up"></i>
-                            <strong>100</strong>
-                            <i class="disvote fas fa-long-arrow-alt-up"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="item-video">
-                <img class="rounded" src="/images/chillhop.jpg" width="200" height="100%" />
-                <div id="video-detail">
-                    <h5 class="title" style="color: #ffb347">Chillhop Esstential</h5>
-                    <small class="author">Chillhop Music</small>
-                    <p>1,1 Tr lượt xem</p>
-                    <div id="video-detail-icon">
-                        <div>
-                            <i class="like fas fa-thumbs-up"></i>
-                            <i class="dislike fas fa-thumbs-down"></i>
-                        </div>
-                        <div>
-                            <i class="vote fas fa-long-arrow-alt-up"></i>
-                            <strong>100</strong>
-                            <i class="disvote fas fa-long-arrow-alt-up"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </div>
-    </main>
+        </main>
     </div>
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
