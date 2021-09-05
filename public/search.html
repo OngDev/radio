@@ -1,55 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OD Search</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <link rel="stylesheet" href="search.css" />
-    <link rel="stylesheet" href="style.css" />
+    <!-- <link rel="stylesheet" href="style.css" /> -->
     <script type="text/javascript" src="main.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-</head>
+  </head>
 
-<body>
-    <div id="decorated">
-        <nav class="container navbar">
-            <div class="
-        container-fluid
-        d-flex
-        justiy-content-between
-        align-items-center
-      ">
-                <a class="navbar-brand" href="/">
-                    <img height="65px" src="./images/logo.png" alt="Logo" />
-                </a>
-                <form id="form-search">
-                    <input type="text" id="form-search-input" value="" placeholder="Search video" class="form-control" />
-                </form>
-                <div class="acount">
-                    <div id="full-name" style="visibility: hidden;"></div>
-                    <img id="avatar" src="logo.jpg" style="visibility: hidden;" width="25px" height="25px" />
-                </div>
-                <button class="btn btn-info" id="btn-login" onclick="window.location='/login'">Login</button>
-                <button class="btn btn-info" id="btn-logout" onclick="window.location='/logout'">Logout</button>
+  <body>
+    <div class="content">
+      <nav class="container navbar">
+        <div
+          class="
+            container-fluid
+            d-flex
+            justiy-content-between
+            align-items-center
+          "
+        >
+          <a class="navbar-brand" href="/">
+            <img height="65px" src="./images/logo.png" alt="Logo" />
+          </a>
+          <div class="acount">
+            <div id="full-name" style="visibility: hidden"></div>
+            <img
+              id="avatar"
+              src="logo.jpg"
+              style="visibility: hidden"
+              width="25px"
+              height="25px"
+            />
+          </div>
+          <div
+            class="od-text-title"
+            id="btn-login"
+            onclick="window.location='/login'"
+          >
+            Đăng Nhập
+          </div>
+          <!-- <button
+            class="btn btn-info"
+            id="btn-logout"
+            onclick="window.location='/logout'"
+          >
+            Logout
+          </button> -->
+        </div>
+      </nav>
+      <main class="container">
+        <!-- <div class="row col-md-12 video">
+          <div id="list-video"></div>
+        </div> -->
+        <div class="row video">
+          <div class="col-md-4 video__waiting">
+            <div class="rank-header"><h3 class="od-text-title">Junior</h3></div>
+            <div class="video__waiting-list" id="video-wait"></div>
+          </div>
+          <div class="col-md-8 video__recent-added">
+            <div class="od-rule">
+              <h4 class="od-text-info">Ông Dev</h4>
+              <p>Chào các cháu Ông Dev đến với ODRadio ! Nơi khởi nguồn cảm hứng, đam mê :v. </p>
+              <p>Dưới đây là một vài giáo điều trên ODRadio :</p>
+              <ul>
+                <li>
+                    Các nội dung được phát trên ODRadio: MV âm nhạc, podcast....
+                </li>
+                <li>
+                    Vui lòng chọn các video có thời lượng ngắn hơn 10 phút
+                </li>
+              </ul>
+              <p>
+                <em>Mọi đóng góp vui lòng liên hệ @OngDev</em>
+              </p>
             </div>
-        </nav>
-        <main class="container">
-            <div class="row col-md-12 video">
-                <div id="list-video">
-                </div>
+            <hr />
+            <div class="rank-header">
+              <h3 class="od-text-title">Fresher</h3>
+              <form id="form-search">
+                <input
+                  type="text"
+                  id="form-search-input"
+                  value=""
+                  placeholder="Tim kiem video"
+                  class="form-control"
+                />
+              </form>
             </div>
-        </main>
+            <div class="video__recent-list" id="video-recent"></div>
+          </div>
+        </div>
+      </main>
+      <div class="container">
+        <hr />
+      </div>
+      <footer class="container">@ Ong dev Radio</footer>
     </div>
-    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+      integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+      crossorigin="anonymous"
+    ></script>
     <script src="./search.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
-</body>
-
+  </body>
 </html>
