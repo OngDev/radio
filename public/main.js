@@ -42,7 +42,7 @@ socket.on("playingVideo", async(data) => {
             }
         });
         document.getElementById('titlePlayingVideo').innerHTML = `<h4>${data.playingVideo.title}</h4>`
-        updateCount(data.playingVideo._id)
+        updateCount(data.playingVideo._id);
         init(data.playingVideo);
     }
 })
@@ -76,8 +76,7 @@ function updateCount(id) {
     countLikeVideo(id).then(async(response) => {
         const user = await axios.get(`/user/me`);
         const { email } = user.data;
-        let elementLike = ""
-        let elementDislike = ""
+        let elementLike = ""; elementDislike = ""
         if (response.likes.findIndex(x => x.authorEmail == email) >= 0) {
             elementLike = `<h5><i class="like fas fa-thumbs-up" onclick="unlike('${id}')"></i> <span id="likeCount">${response.likes.length}</span> Like</h5>`
         } else elementLike = `<h5><i class="like fas fa-thumbs-up" onclick="like('${id}')"></i> <span id="likeCount">${response.likes.length}</span> Like</h5>`

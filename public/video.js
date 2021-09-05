@@ -80,21 +80,40 @@ async function unDislike(id) {
 }
 
 async function init(playingVideo) {
-    await getAll().then((resposne) => {
-        // console.log(resposne);
-        if (resposne.length == 0) return console.log("Empty");
-        let element = "";
-        videoList = resposne;
+    await getAll().then((response) => {
+        if (response.length == 0) return console.log("Empty");
+        let element = "", counter = 0;
+        videoList = response;
         videoList.filter((video) => video.youtubeVideoId !== playingVideo.youtubeVideoId).map((res) => {
-            element += `<div class="item-video">
-          <img class="rounded" src="${res.thumbnailUrl}" width="200" height="100%" style="min-width: 200px"/>
-          <div class="video-detail">
-              <h5 class="title" style="color: #ffb347; font-size: 1rem">${res.title}</h5>
-              <small class="author">Add by: ${res.authorEmail}</small>
-              <p>${res.views} lượt xem</p>
-          </div>
-      </div>`;
+            element += 
+            `<div class="videos-container__track-item" style="background: #181818">
+                <div class="row" style="padding-bottom: 0.3333em;">
+                    <div class="col-1 videos-container__track-no">${++counter}</div>
+                    <div class="col-3 videos-container__track-image">
+                        <img
+                        src="${res.thumbnailUrl}"
+                        class="thumbnail"
+                        />
+                    </div>
+                    <div class="col-8 videos-container__track-info">
+                        <div class="videos-container__track-info__video-name">
+                        ${res.title}
+                        </div>
+                        <div class="videos-container__track-info__suggested">
+                        Suggested by <strong>${res.authorEmail}</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="row voting">
+                    <div class="col-1"></div>
+                    <div class="col-5">
+                        <i class="fas fa-arrow-alt-up"></i>
+                        <span class="vote-counter">100</span>
+                        <i class="fas fa-arrow-alt-down"></i>
+                    </div>
+                </div>
+            </div>`;
         });
-        document.getElementById("list-video").innerHTML = element;
+        document.getElementById("videos-container__tracks").innerHTML += element;
     });
 }
