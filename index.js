@@ -12,6 +12,8 @@ import { join } from 'path';
 import { createServer } from 'http';
 import { Server } from "socket.io";
 import path from 'path'
+import * as fs from 'fs';
+import moment from 'moment';
 
 const __dirname = path.resolve()
 
@@ -33,6 +35,12 @@ io.on('connection', (client) => {
     client.emit('playingVideo', {
         playingVideo,
         playedTime
+    });
+
+    var clientIpAddress = client.request.headers['x-forwarded-for'] || client.request.connection.remoteAddress;
+    fs.appendFile('address.txt', `New connection from ${clientIpAddress} at ${moment().format()} \n`, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
     });
 });
 

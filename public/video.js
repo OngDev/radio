@@ -104,14 +104,6 @@ async function init(playingVideo) {
                         </div>
                     </div>
                 </div>
-                <div class="row voting">
-                    <div class="col-1"></div>
-                    <div class="col-5">
-                        <i class="fas fa-arrow-alt-up"></i>
-                        <span class="vote-counter">100</span>
-                        <i class="fas fa-arrow-alt-down"></i>
-                    </div>
-                </div>
             </div>`;
         });
         document.getElementById("videos-container__tracks").innerHTML += element;

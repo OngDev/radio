@@ -1,83 +1,222 @@
-#form-search {
-  width: 50%;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500&display=swap");
+body {
+  background-color: #000;
+  max-width: 1140px;
+  text-align: center;
   align-items: center;
+  margin: 0 auto;
 }
 
-#account img {
-  border-radius: 50%;
-  height: 40px;
+@media screen and (max-width: 1600px) {
+  body {
+    margin-left: 8rem;
+    margin-right: 8rem;
+  }
 }
 
-#list-video {
+em {
+  font-size: small;
+}
+
+/* Main */
+main {
+  flex: 1;
   overflow: hidden;
-  overflow-y: scroll;
-  max-height: 80vh;
 }
 
-#list-video #item-video {
+.navbar {
+  font-family: "Poppins", sans-serif;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#avatar {
+  width: 1.8333em;
+  height: 1.8333em;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#btn-search {
+  color: #fff;
+  font-weight: 300;
+}
+
+.fas {
+  font-weight: 200;
+  margin-right: 0.5333em;
+}
+
+.nav__utility-btn {
+  cursor: pointer;
+  padding: 0.6667em 1.3333em;
+  background-color: #181818;
+  border-radius: 20px;
+  opacity: 0.85;
+  transition: 0.1s ease-out;
+}
+
+.nav__utility-btn:hover {
+  opacity: 1;
+}
+
+#nav__auth {
+  margin-left: auto;
+}
+
+.auth {
+  color: #000 !important;
+  background-color: #fff;
+}
+
+#logout-btn {
+  font-size: 0.8333em;
+  float: right;
+  color: #c4c4c4;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+#user-profile {
+  color: #fff;
+}
+
+#logout-btn:hover {
+  text-decoration: underline;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  background-color: #000000;
+}
+
+.od-text-title {
+  color: #fbae40;
+}
+
+.od-text-info {
+  color: #fef1dc;
+}
+
+.rank-header {
   display: flex;
   justify-content: space-between;
-  border-radius: 3px;
-  margin: 10px 0px;
-  padding: 24px;
-  background: url("images/glassmorphism.png") no-repeat center left;
-  background-size: cover;
 }
 
-#list-video #item-video img {
-  max-width: 350px;
+.video {
+  background-color: #000000;
+  color: rgb(240, 248, 255);
+  padding-top: 10px;
   height: 100%;
-  border-radius: 10px;
 }
 
-#list-video #item-video #video-action {
-  display: none;
+.video__title p {
+  margin-bottom: 0;
 }
 
-#list-video #item-video #video-content {
-  margin-left: 10px;
-}
-
-#list-video #item-video #video-content h5 {
-  color: #ffb347;
-}
-
-#list-video #item-video #video-content p {
-  margin: 5px 0px;
-}
-
-#list-video #item-video #video-content #video-author {
+/* Video waiting */
+.video__waiting {
+  height: 100%;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.video__waiting-list {
+  overflow: auto;
+}
+
+.video__waiting-list .video__item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  background-color: #000000;
+}
+
+.video__item:hover {
+  cursor: pointer;
+  color: #fbae40;
+}
+
+.video__waiting-list .video__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.video__waiting-list .video__data {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.meta {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+}
+
+/* Video Recently List */
+.video__recent-added {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.video__recent-list {
+  overflow: auto;
+}
+
+.video__recent-list .video__item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-right: 15px;
+  height: 120px;
+}
+
+.video__recent-list .video__info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-#list-video #item-video #video-content #video-author img {
-  width: 30px;
+.video__recent-list .video__data {
+  display: flex;
+  gap: 20px;
+}
+
+footer {
+  width: 100%;
   height: 30px;
-  border-radius: 50%;
+  text-align: center;
+  bottom: 0;
+  position: fixed;
+  opacity: 50%;
 }
 
-#list-video #item-video #video-content #video-author p {
-  margin-left: 10px;
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: blue orange;
 }
 
-#list-video #item-video #video-content #btn-add {
-  border: none;
-  outline: none;
-  background-color: rgba(197, 197, 197, 0.7);
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 500;
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
 }
 
-#list-video #item-video #video-content #btn-add:hover {
-  border: none;
-  outline: none;
-  background-color: rgba(0, 0, 0, 1);
-  color: #ffb347;
-  transition: all 0.3s ease 0.1s;
+*::-webkit-scrollbar-track {
+  background: rgb(0, 0, 0);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #fbae40;
+  border-radius: 20px;
+  border: 3px solid rgb(0, 0, 0);
 }

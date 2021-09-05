@@ -27,6 +27,13 @@ a:hover {
   padding-bottom: 1rem;
 }
 
+#avatar {
+  width: 1.8333em;
+  height: 1.8333em;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 #btn-search {
   color: #fff;
   font-weight: 300;
@@ -57,6 +64,23 @@ a:hover {
 .auth {
   color: #000 !important;
   background-color: #fff;
+}
+
+.me-hide {
+  display: none;
+}
+
+#logout-btn {
+  font-size: 0.8333em;
+  float: right;
+  color: #c4c4c4;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+#logout-btn:hover {
+  text-decoration: underline;
 }
 
 main {
@@ -204,7 +228,7 @@ main {
   max-height: 80vh;
 }
 
-#list-video .item-video {
+.item-video {
   display: flex;
   justify-content: flex-start;
   border-radius: 3px;
@@ -545,4 +569,17 @@ main {
   .dislike {
     margin-left: 12px;
   }
+}
+
+iframe {
+  width: 100%;
+}
+
+#titlePlayingVideo {
+  padding-left: 1.3333rem;
+  text-align: left;
+}
+
+.user-profile:first-child {
+  display: none;
 }

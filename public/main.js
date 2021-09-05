@@ -7,20 +7,26 @@ var player;
 const updateUI = async() => {
     const fullName = document.getElementById('full-name');
     const avatar = document.getElementById('avatar');
-    const response = await axios.get(`/user/me`);
-    const { nickname, picture } = response.data;
 
-    const isAuthenticated = nickname && picture;
+    try {
+        const response = await axios.get(`/user/me`);
+        const { nickname, picture } = response.data;
 
-    document.getElementById("btn-login").style.visibility = isAuthenticated ? 'hidden' : 'visible';
-    document.getElementById("btn-logout").style.display = isAuthenticated ? 'block' : 'none';
+        const isAuthenticated = nickname && picture;
+        document.getElementById("btn-login").style.visibility = isAuthenticated ? 'hidden' : 'visible';
+        document.getElementsByClassName("user-profile")[0].style.display = isAuthenticated ? 'block' : 'none';
 
-    if (nickname && picture) {
-        fullName.innerHTML = nickname;
-        avatar.src = picture;
-        fullName.style.visibility = 'visible';
-        avatar.style.visibility = 'visible';
+        if (nickname && picture) {
+            fullName.innerHTML = nickname;
+            avatar.src = picture;
+            fullName.style.visibility = 'visible';
+            avatar.style.visibility = 'visible';
+        }
+    } catch (error) {
+        document.getElementsByClassName("user-profile")[0].style.display = 'none';
+        console.log(error);
     }
+    
 };
 
 const socket = io();
@@ -42,7 +48,7 @@ socket.on("playingVideo", async(data) => {
             }
         });
         document.getElementById('titlePlayingVideo').innerHTML = `<h4>${data.playingVideo.title}</h4>`
-        updateCount(data.playingVideo._id);
+        // updateCount(data.playingVideo._id);
         init(data.playingVideo);
     }
 })
