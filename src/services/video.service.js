@@ -40,7 +40,7 @@ export async function getVideoById(id) {
 
 export async function getAll() {
     try {
-        return await VideoModel.find();
+        return videoQueue.items();
     } catch (error) {
         throw error;
     }
