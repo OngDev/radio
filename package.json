@@ -20,7 +20,8 @@
         "mongodb-connection-string-url": "^2.0.0",
         "mongoose": "^6.0.0",
         "morgan": "^1.10.0",
-        "socket.io": "^4.2.0"
+        "socket.io": "^4.2.0",
+        "youtube-search-api": "^1.0.10"
     },
     "keywords": [],
     "author": "",

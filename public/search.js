@@ -36,16 +36,7 @@ const updateUI = async() => {
 
 const searchVideo = async(value) => {
     try {
-        const lastSubmit = new Date(localStorage.getItem('last-submit'));
-        const now = new Date();
-        var dif = now.getTime() - lastSubmit.getTime();
-
-        if (dif < 60000) {
-            alert("Chờ xí rồi search lại nghe");
-            return;
-        }
         const response = await axios.get(`/video/search?keyword=${value}`)
-        localStorage.setItem('last-submit', new Date());
         renderListVideo(response.data);
     } catch (error) {
         console.error(error.message)
@@ -57,19 +48,19 @@ form.onsubmit = async(e) => {
     await searchVideo(searchValue.value);
 };
 
-function renderListVideo(video) {
+function renderListVideo(videos) {
     let videoItem = '';
-    video.items.map((item) => {
+    videos.map((item) => {
         videoItem += `
 		<div class="video__item">
 			<img 
-                src="https://i.ytimg.com/vi/${item.id.videoId}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDQnfzl1FDNNWAUfgjhMY0wZYRiug" 
+                src="${item.thumbnail.thumbnails[0].url}"
                 alt="" 
                 width="160px" height="auto"
             >
 			<div class="meta">
-                <button class="btn btn-dark add-btn" onclick="createVideo('${item.id.videoId}')">Add</button>
-				<div class="title">${item.snippet.title}</div>
+                <button class="btn btn-dark add-btn" onclick="createVideo('${item.id}')">Add</button>
+				<div class="title">Duration: ${item.length.simpleText} | ${item.title}</div>
 			</div>
 		</div>
 		`;

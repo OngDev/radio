@@ -1,4 +1,5 @@
 import axios from 'axios';
+import youtubeSearchApi from 'youtube-search-api';
 import get from '../configs/env.config.js';
 const YOUTUBE_API_URL = get('youtube_api_url');
 const YOUTUBE_API_KEY = get('youtube_api_key');
@@ -19,8 +20,8 @@ export async function getYoutubeVideo(youtubeVideoId) {
 
 export async function searchYoutube(keyword) {
     try {
-        const response = await axios.get(`${YOUTUBE_API_URL}/search?part=snippet&key=${YOUTUBE_API_KEY}&type=video&q=${keyword}`);
-        return response.data
+        const response = await youtubeSearchApi.GetListByKeyword(keyword);
+        return response.items;
     } catch (error) {
         console.error(error)
         throw error;
