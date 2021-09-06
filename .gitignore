@@ -1,2 +1,5 @@
 node_modules
 .env
+address.txt
+dev-env-compose.yml
+mongo-data/
