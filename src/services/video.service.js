@@ -10,6 +10,7 @@ import io from '../../index.js';
 setInterval(() => {
     try {
         const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
+        console.log(playedTime, playingVideo && playingVideo.duration)
         if ((playingVideo === null || (playedTime > playingVideo.duration)) && videoQueue.size() > 0) {
             console.log('Dequeue video to playing video')
             playingVideo = videoQueue.dequeue();
@@ -19,7 +20,7 @@ setInterval(() => {
                 playedTime: 0
             });
         }
-        if (videoQueue.size() === 0) {
+        if (videoQueue.size() === 0 && playingVideo === null) {
             console.log('Playlist is empty, init new')
             initPlaylist();
         }

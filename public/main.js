@@ -33,21 +33,26 @@ var playingVideo = null;
 socket.on("playingVideo", async(data) => {
     if (data.playingVideo) {
         playingVideo = data.playingVideo;
-        player = new YT.Player('videoPlaying', {
-            height: '390',
-            width: '640',
-            videoId: `${data.playingVideo.youtubeVideoId}`,
-            enablejsapi: 1,
-            playerVars: {
-                'autoplay': 1,
-                'controls': 0,
-                'mute': 1,
-                'start': `${data.playedTime}`,
-            },
-            events: {
-                'onReady': onPlayerReady,
-            }
-        });
+        if (player === null || player === undefined) {
+            player = new YT.Player('videoPlaying', {
+                height: '390',
+                width: '640',
+                videoId: `${data.playingVideo.youtubeVideoId}`,
+                enablejsapi: 1,
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0,
+                    'mute': 1,
+                    'start': `${data.playedTime}`,
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                }
+            });
+        } else {
+            player.loadVideoById(`${data.playingVideo.youtubeVideoId}`);
+        }
+
         document.getElementById('titlePlayingVideo').innerHTML = `<h4>${data.playingVideo.title}</h4>`
             // updateCount(data.playingVideo._id);
         init(data.playingVideo);
@@ -68,11 +73,10 @@ function changeMute() {
     const mutedBtn = document.getElementById('muted');
     if (player.isMuted()) {
         player.unMute();
-        mutedBtn.innerHTML =`<i class="fas fa-volume"></i>`;
-    }
-    else {
+        mutedBtn.innerHTML = `<i class="fas fa-volume"></i>`;
+    } else {
         player.mute();
-        mutedBtn.innerHTML =`<i class="fas fa-volume-mute"></i>`;
+        mutedBtn.innerHTML = `<i class="fas fa-volume-mute"></i>`;
     }
 }
 // var done = false;
