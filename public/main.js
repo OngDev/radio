@@ -32,28 +32,22 @@ var socket = io();
 var playingVideo = null;
 socket.on("playingVideo", async(data) => {
     if (data.playingVideo) {
-        playingVideo = data.playingVideo;
-        if (player === null || player === undefined) {
-            player = new YT.Player('videoPlaying', {
-                height: '390',
-                width: '640',
-                videoId: `${data.playingVideo.youtubeVideoId}`,
-                enablejsapi: 1,
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'mute': 1,
-                    'start': `${data.playedTime}`,
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                }
-            });
-        } else {
-            player.loadVideoById(`${data.playingVideo.youtubeVideoId}`);
-        }
-
-        document.getElementById('titlePlayingVideo').innerHTML = `<h4>${data.playingVideo.title}</h4>`
+        player = new YT.Player('videoPlaying', {
+            height: '390',
+            width: '640',
+            videoId: `${data.playingVideo.youtubeVideoId}`,
+            enablejsapi: 1,
+            playerVars: {
+                'autoplay': 1,
+                'controls': 0,
+                'mute': 1,
+                'start': `${data.playedTime}`,
+            },
+            events: {
+                'onReady': onPlayerReady,
+            }
+        });
+        document.getElementById('titlePlayingVideo').innerHTML = `${data.playingVideo.title}`
             // updateCount(data.playingVideo._id);
         init(data.playingVideo);
     }
@@ -93,23 +87,30 @@ function changeMute() {
 // }
 
 function updateCount(id) {
-    countLikeVideo(id).then(async(response) => {
-        const user = await axios.get(`/user/me`);
-        const { email } = user.data;
-        let elementLike = "";
-        elementDislike = ""
-        if (response.likes.findIndex(x => x.authorEmail == email) >= 0) {
-            elementLike = `<h5><i class="like fas fa-thumbs-up" onclick="unlike('${id}')"></i> <span id="likeCount">${response.likes.length}</span> Like</h5>`
-        } else elementLike = `<h5><i class="like fas fa-thumbs-up" onclick="like('${id}')"></i> <span id="likeCount">${response.likes.length}</span> Like</h5>`
+    countLikeVideo(id)
+        .then(async(response) => {
+            const user = await axios.get(`/user/me`);
+            const { email } = user.data;
+            let upvoted = "", downvoted = "";
+            if (response.likes.findIndex(x => x.authorEmail == email) >= 0) {
+                upvoted = `<i class="fas fa-arrow-alt-up" onclick="unlike('${id}')></i>`
+            } else {
+                upvoted = `<i class="fas fa-arrow-alt-up" onclick="like('${id}')></i>`
+            }
+            if (response.dislikes.findIndex(x => x.authorEmail == email) >= 0) {
+                downvoted = `<i class="fas fa-arrow-alt-down" onclick="unDislike('${id}')></i>`
+            } else {
+                downvoted = `<i class="fas fa-arrow-alt-down" onclick="unDislike('${id}')></i>`
+            }
 
-        if (response.dislikes.findIndex(x => x.authorEmail == email) >= 0) {
-            elementDislike = `<h5><i class="dislike fas fa-thumbs-down" onclick="unDislike('${id}')"></i> <span id="dislikeCount">${response.dislikes.length}</span> Dislike</h5>`
-        } else elementDislike = `<h5><i class="dislike fas fa-thumbs-down" onclick="dislike('${id}')"></i> <span id="dislikeCount">${response.dislikes.length}</span> Dislike</h5>`
-
-        let elementReactLike = `<div class="d-inline-flex justify-content-between">
-            ${elementLike}
-            ${elementDislike}
-        </div>`;
-        document.getElementById("reactLike").innerHTML = elementReactLike;
-    });
+            let upvoteCounter = response.likes.length, downvoteCounter = response.dislikes.length;
+            document.getElementById("video-voting").innerHTML = `
+                ${upvoted}
+                <h6 class="mx-1" style="padding-right: 0.4333em;">${upvoteCounter - downvoteCounter}</h6>
+                ${downvoted}
+            `;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 }
