@@ -38,9 +38,8 @@ io.on('connection', (client) => {
     });
 
     var clientIpAddress = client.request.headers['x-forwarded-for'] || client.request.connection.remoteAddress;
-    fs.appendFile('address.txt', `New connection from ${clientIpAddress} at ${moment().format()} \n`, function (err) {
-        if (err) throw err;
-        console.log('Saved!');
+    fs.appendFile('address.txt', `New connection from ${clientIpAddress} at ${moment().format()} \n`, function(err) {
+        if (err) console.log(err.message);
     });
 });
 
