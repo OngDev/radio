@@ -28,9 +28,11 @@ const updateUI = async() => {
     }
 };
 
-const socket = io();
+var socket = io();
+var playingVideo = null;
 socket.on("playingVideo", async(data) => {
     if (data.playingVideo) {
+        playingVideo = data.playingVideo;
         player = new YT.Player('videoPlaying', {
             height: '390',
             width: '640',
@@ -50,6 +52,10 @@ socket.on("playingVideo", async(data) => {
             // updateCount(data.playingVideo._id);
         init(data.playingVideo);
     }
+})
+
+socket.on("new-video-added", async() => {
+    init(playingVideo);
 })
 
 function onPlayerReady(event) {
