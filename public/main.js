@@ -1,7 +1,3 @@
-window.onload = async() => {
-    updateUI();
-}
-
 var player;
 
 const updateUI = async() => {
@@ -10,8 +6,8 @@ const updateUI = async() => {
 
     try {
         const response = await axios.get(`/user/me`);
-        const { nickname, picture } = response.data;
-
+        const { nickname, picture, email: userEmail } = response.data;
+        window.email = userEmail;
         const isAuthenticated = nickname && picture;
         document.getElementById("btn-login").style.visibility = isAuthenticated ? 'hidden' : 'visible';
         document.getElementsByClassName("user-profile")[0].style.display = isAuthenticated ? 'block' : 'none';
@@ -27,11 +23,13 @@ const updateUI = async() => {
         console.log(error);
     }
 };
+updateUI();
 
 var socket = io();
 var playingVideo = null;
 socket.on("playingVideo", async(data) => {
-    if (data.playingVideo) {
+    playingVideo = data.playingVideo;
+    if (player === null || player === undefined) {
         player = new YT.Player('videoPlaying', {
             height: '390',
             width: '640',
@@ -47,14 +45,16 @@ socket.on("playingVideo", async(data) => {
                 'onReady': onPlayerReady,
             }
         });
-        document.getElementById('titlePlayingVideo').innerHTML = `${data.playingVideo.title}`
-            // updateCount(data.playingVideo._id);
-        init(data.playingVideo);
+    } else {
+        player.loadVideoById(`${data.playingVideo.youtubeVideoId}`);
     }
+    document.getElementById('titlePlayingVideo').innerHTML = `${data.playingVideo.title}`
+        // updateCount(data.playingVideo._id);
+    init();
 })
 
 socket.on("new-video-added", async() => {
-    init(playingVideo);
+    init();
 })
 
 function onPlayerReady(event) {
@@ -91,7 +91,8 @@ function updateCount(id) {
         .then(async(response) => {
             const user = await axios.get(`/user/me`);
             const { email } = user.data;
-            let upvoted = "", downvoted = "";
+            let upvoted = "",
+                downvoted = "";
             if (response.likes.findIndex(x => x.authorEmail == email) >= 0) {
                 upvoted = `<i class="fas fa-arrow-alt-up" onclick="unlike('${id}')></i>`
             } else {
@@ -103,7 +104,8 @@ function updateCount(id) {
                 downvoted = `<i class="fas fa-arrow-alt-down" onclick="unDislike('${id}')></i>`
             }
 
-            let upvoteCounter = response.likes.length, downvoteCounter = response.dislikes.length;
+            let upvoteCounter = response.likes.length,
+                downvoteCounter = response.dislikes.length;
             document.getElementById("video-voting").innerHTML = `
                 ${upvoted}
                 <h6 class="mx-1" style="padding-right: 0.4333em;">${upvoteCounter - downvoteCounter}</h6>

@@ -34,7 +34,7 @@ export async function createVideo(req, res, next) {
 export async function deleteVideo(req, res, next) {
     try {
         const { email } = req.oidc.user;
-        if (email !== 'milonguyen95@outlook.com' || email !== 'admin@ongdev.com') {
+        if (email !== 'milonguyen95@outlook.com' && email !== 'admin@ongdev.com') {
             return res.status(401).end();
         }
         const videoId = req.params.id;

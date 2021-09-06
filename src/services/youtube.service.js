@@ -38,5 +38,7 @@ function extractDurationFromYoutube(durationStr) {
     const min = mIndex !== -1 ? durationStr.substring(hIndex !== -1 ? hIndex + 1 : startIndex, mIndex) : 0;
     const hour = hIndex !== -1 ? durationStr.substring(startIndex, hIndex) : 0;
 
+    if (hour || min > 10) throw new Error("Too long video!");
+
     return (+hour * 60 + +min) * 60 + +sec;
 }
