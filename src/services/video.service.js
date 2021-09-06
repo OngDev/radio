@@ -8,21 +8,27 @@ let currentVideoStartedTime = null;
 import io from '../../index.js';
 
 setInterval(() => {
-    const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
-    if ((playingVideo === null || (playedTime > playingVideo.duration)) && videoQueue.size() > 0) {
-        console.log('Dequeue video to playing video')
-        playingVideo = videoQueue.dequeue();
-        currentVideoStartedTime = moment();
-        io.emit('playingVideo', {
-            playingVideo,
-            playedTime: 0
-        });
+    try {
+        const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
+        console.log(playedTime, playingVideo && playingVideo.duration)
+        if ((playingVideo === null || (playedTime > playingVideo.duration)) && videoQueue.size() > 0) {
+            console.log('Dequeue video to playing video')
+            playingVideo = videoQueue.dequeue();
+            currentVideoStartedTime = moment();
+            io.emit('playingVideo', {
+                playingVideo,
+                playedTime: 0
+            });
+        }
+        if (videoQueue.size() === 0 && playingVideo === null) {
+            console.log('Playlist is empty, init new')
+            initPlaylist();
+        }
+    } catch (error) {
+        console.log(error.message)
     }
-    if (videoQueue.size() === 0) {
-        console.log('Playlist is empty, init new')
-        initPlaylist();
-    }
-}, 1000)
+
+}, 2000)
 
 export async function getVideoById(id) {
     try {
@@ -44,7 +50,10 @@ export async function createVideo(youtubeVideoId, authorEmail) {
     try {
         const { title, thumbnailUrl, duration } = await getYoutubeVideo(youtubeVideoId);
 
-        return await VideoModel.create({ title, youtubeVideoId, authorEmail, duration, thumbnailUrl });
+        const newVideo = await VideoModel.create({ title, youtubeVideoId, authorEmail, duration, thumbnailUrl });
+        io.emit('new-video-added', {});
+        videoQueue.enqueue(newVideo)
+        return newVideo;
     } catch (error) {
         console.log(error.message)
         throw error;

@@ -82,11 +82,12 @@ async function unDislike(id) {
 async function init(playingVideo) {
     await getAll().then((response) => {
         if (response.length == 0) return console.log("Empty");
-        let element = "", counter = 0;
+        let element = "",
+            counter = 0;
         videoList = response;
         videoList.filter((video) => video.youtubeVideoId !== playingVideo.youtubeVideoId).map((res) => {
-            element += 
-            `<div class="videos-container__track-item" style="background: #181818">
+            element +=
+                `<div class="videos-container__track-item" style="background: #181818">
                 <div class="row" style="padding-bottom: 0.3333em;">
                     <div class="col-1 videos-container__track-no">${++counter}</div>
                     <div class="col-3 videos-container__track-image">
@@ -106,6 +107,6 @@ async function init(playingVideo) {
                 </div>
             </div>`;
         });
-        document.getElementById("videos-container__tracks").innerHTML += element;
+        document.getElementById("videos-container__tracks").innerHTML = element;
     });
 }

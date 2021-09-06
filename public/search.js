@@ -36,9 +36,17 @@ const updateUI = async() => {
 
 const searchVideo = async(value) => {
     try {
+        const lastSubmit = new Date(localStorage.getItem('last-submit'));
+        const now = new Date();
+        var dif = now.getTime() - lastSubmit.getTime();
+
+        if (dif < 60000) {
+            alert("Chờ xí rồi search lại nghe");
+            return;
+        }
         const response = await axios.get(`/video/search?keyword=${value}`)
+        localStorage.setItem('last-submit', new Date());
         renderListVideo(response.data);
-        console.log(response.data);
     } catch (error) {
         console.error(error.message)
     }
