@@ -94,7 +94,9 @@ async function createVideo(youtubeVideoId) {
             btn.disabled = false;
         }
     }).catch(error => {
-        console.error(error.message)
-        alert("Add cái khác giùm cái :((")
+        for (btn of addBtns) {
+            btn.disabled = false;
+        }
+        alert("Add cái khác giùm cái, trùng hoặc dài quá đó :((")
     })
 }

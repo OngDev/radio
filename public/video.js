@@ -59,6 +59,18 @@ async function countLikeVideo(id) {
     return result.data;
 }
 
+async function deleteVideo(id) {
+    try {
+        let result = await axios({
+            url: ROUTE + `/${id}`,
+            method: "DELETE",
+        });
+        return result.data;
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
 async function like(id) {
     await likeVideo(id);
     updateCount(id);
@@ -79,15 +91,15 @@ async function unDislike(id) {
     updateCount(id);
 }
 
-async function init(playingVideo) {
+async function init() {
     await getAll().then((response) => {
         if (response.length == 0) return console.log("Empty");
         let element = "",
             counter = 0;
         videoList = response;
-        videoList.filter((video) => video.youtubeVideoId !== playingVideo.youtubeVideoId).map((res) => {
+        videoList.map((res) => {
             element +=
-                `<div class="videos-container__track-item" style="background: #181818">
+                (`<div class="videos-container__track-item" style="background: #181818">
                 <div class="row" style="padding-bottom: 0.3333em;">
                     <div class="col-1 videos-container__track-no">${++counter}</div>
                     <div class="col-3 videos-container__track-image">
@@ -102,10 +114,11 @@ async function init(playingVideo) {
                         </div>
                         <div class="videos-container__track-info__suggested">
                         Suggested by <strong>${res.authorEmail}</strong>
-                        </div>
-                    </div>
+                        </div>` +
+                    (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
+                    `</div>
                 </div>
-            </div>`;
+            </div>`);
         });
         document.getElementById("videos-container__tracks").innerHTML = element;
     });

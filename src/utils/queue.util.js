@@ -4,4 +4,5 @@ export default class Queue {
     enqueue(item) { this.q.push(item); }
     dequeue() { return this.q.shift(); }
     size() { return this.q.length; }
+    deleteVideo(id) { this.q = this.q.filter((video) => video.id !== id) }
 }

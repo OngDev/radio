@@ -61,6 +61,8 @@ export async function createVideo(youtubeVideoId, authorEmail) {
 
 export async function deleteVideo(id) {
     try {
+        videoQueue.deleteVideo(id);
+        io.emit('new-video-added', {});
         return await VideoModel.findByIdAndDelete(id);
     } catch (error) {
         throw error;
