@@ -59,9 +59,14 @@ function onPlayerReady(event) {
 }
 
 function changeMute() {
-    if (player.isMuted()) player.unMute();
+    const mutedBtn = document.getElementById('muted');
+    if (player.isMuted()) {
+        player.unMute();
+        mutedBtn.innerHTML =`<i class="fas fa-volume"></i>`;
+    }
     else {
         player.mute();
+        mutedBtn.innerHTML =`<i class="fas fa-volume-mute"></i>`;
     }
 }
 // var done = false;
