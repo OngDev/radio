@@ -20,7 +20,7 @@ export default () => {
         .post(dislikeVideo)
         .delete(unDislikeVideo);
     router.get('/count/:id', getLikeAndDisLike);
-    router.get('/search', openId.requiresAuth(), rateLimit({ windowMs: 60 * 1000, max: 1 }), searchYoutube);
+    router.get('/search', openId.requiresAuth(), searchYoutube);
     router.get('/:id', getById);
     router.delete('/:id', openId.requiresAuth(), deleteVideo);
     return router;
