@@ -828,7 +828,7 @@ iframe {
   background-color: rgb(38, 38, 38);
   outline: none;
   -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
+  transition: all 0.3s;
   border-radius: 15px;
   opacity: 0.5;
 }

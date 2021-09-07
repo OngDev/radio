@@ -68,6 +68,7 @@ function changeMute() {
     if (player.isMuted()) {
         player.unMute();
         mutedBtn.innerHTML = `<i class="fas fa-volume"></i>`;
+        document.getElementById('volume-control').value = 30;
     } else {
         player.mute();
         mutedBtn.innerHTML = `<i class="fas fa-volume-mute"></i>`;
