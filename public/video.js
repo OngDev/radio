@@ -19,6 +19,7 @@ async function getById(id) {
     return result.data;
 }
 
+// Like
 async function likeVideo(id) {
     try {
         let result = await axios({
@@ -31,6 +32,7 @@ async function likeVideo(id) {
     }
 }
 
+// Redo liking that video
 async function unlikeVideo(id) {
     let result = await axios({
         url: ROUTE + "/like/" + id,
@@ -39,6 +41,7 @@ async function unlikeVideo(id) {
     return result.data;
 }
 
+// Dislike
 async function dislikeVideo(id) {
     let result = await axios({
         url: ROUTE + "/dislike/" + id,
@@ -47,6 +50,7 @@ async function dislikeVideo(id) {
     return result.data;
 }
 
+// Redo disliking that video
 async function unDislikeVideo(id) {
     let result = await axios({
         url: ROUTE + "/dislike/" + id,
@@ -102,6 +106,7 @@ async function init() {
             counter = 0;
         videoList = response;
         videoList.map((res) => {
+            console.log(updateCount(res._id));
             element +=
                 (`<div class="videos-container__track-item" style="background: #181818">
                 <div class="row" style="padding-bottom: 0.3333em;">
@@ -121,6 +126,10 @@ async function init() {
                         </div>` +
                     (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
                     `</div>
+                </div>
+                <div class="row voting">
+                    <div class="col-1"></div>
+                    ${updateCount(res._id)}
                 </div>
             </div>`);
         });
