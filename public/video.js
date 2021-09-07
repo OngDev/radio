@@ -20,11 +20,15 @@ async function getById(id) {
 }
 
 async function likeVideo(id) {
-    let result = await axios({
-        url: ROUTE + "/like/" + id,
-        method: "POST",
-    });
-    return result.data;
+    try {
+        let result = await axios({
+            url: ROUTE + "/like/" + id,
+            method: "POST",
+        });
+        return result.data;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 async function unlikeVideo(id) {

@@ -28,7 +28,6 @@ updateUI();
 var socket = io();
 var playingVideo = null;
 socket.on("playingVideo", async(data) => {
-    playingVideo = data.playingVideo;
     if (player === null || player === undefined) {
         player = new YT.Player('videoPlaying', {
             height: '390',
@@ -49,7 +48,7 @@ socket.on("playingVideo", async(data) => {
         player.loadVideoById(`${data.playingVideo.youtubeVideoId}`);
     }
     document.getElementById('titlePlayingVideo').innerHTML = `${data.playingVideo.title}`
-        // updateCount(data.playingVideo._id);
+    updateCount(data.playingVideo._id);
     init();
 })
 
@@ -106,24 +105,27 @@ function updateCount(id) {
         .then(async(response) => {
             const user = await axios.get(`/user/me`);
             const { email } = user.data;
-            let upvoted = "",
-                downvoted = "";
+            let upvoted, downvoted;
             if (response.likes.findIndex(x => x.authorEmail == email) >= 0) {
-                upvoted = `<i class="fas fa-arrow-alt-up" onclick="unlike('${id}')></i>`
+                upvoted = `<i class="fas fa-arrow-up q-m-u" onclick="like('${id}')"></i>`
+                console.log(1);
             } else {
-                upvoted = `<i class="fas fa-arrow-alt-up" onclick="like('${id}')></i>`
+                upvoted = `<i class="fas fa-arrow-up q-m" onclick="dislike('${id}')"></i>`
+                console.log(2);
             }
             if (response.dislikes.findIndex(x => x.authorEmail == email) >= 0) {
-                downvoted = `<i class="fas fa-arrow-alt-down" onclick="unDislike('${id}')></i>`
+                downvoted = `<i class="fas fa-arrow-down q-m" onclick="unDislike('${id}')"></i>`
+                console.log(3);
             } else {
-                downvoted = `<i class="fas fa-arrow-alt-down" onclick="unDislike('${id}')></i>`
+                downvoted = `<i class="fas fa-arrow-down q-m-d" onclick="dislike('${id}')"></i>`
+                console.log(4);
             }
-
+            
             let upvoteCounter = response.likes.length,
                 downvoteCounter = response.dislikes.length;
-            document.getElementById("video-voting").innerHTML = `
+            document.getElementById("video-react").innerHTML = `
                 ${upvoted}
-                <h6 class="mx-1" style="padding-right: 0.4333em;">${upvoteCounter - downvoteCounter}</h6>
+                <h5 style="padding-right: 0.4333em; font-weight: 300; padding-top: 10px;">${downvoteCounter - upvoteCounter}</h5>
                 ${downvoted}
             `;
         })

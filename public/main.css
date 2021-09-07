@@ -195,9 +195,10 @@ main {
   opacity: 0.7;
 }
 
-.fa-arrow-alt-up,
-.fa-arrow-alt-down {
+.fa-arrow-up,
+.fa-arrow-down {
   color: rgb(255, 255, 255, 0.5);
+  font-size: 1.3333rem;
 }
 
 #videoPlaying {
