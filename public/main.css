@@ -795,8 +795,8 @@ iframe {
 
 #muted {
   border: none;
-  background-color: #fff;
-  color: #262626;
+  background-color: rgb(38, 38, 38, 75);
+  color: rgb(255, 255, 255, 70);
   font-size: 1.3333em;
   border-radius: 50%;
   padding: 0.1333em 0.5333rem;
@@ -805,7 +805,8 @@ iframe {
   -webkit-transition: 0.1s ease-in;
   -o-transition: 0.1s ease-in;
   transition: 0.1s ease-in;
-  margin-right: 0.6667em;
+  float: left;
+  margin-left: 0.3333em;
 }
 
 #muted:hover {
@@ -815,4 +816,41 @@ iframe {
 .fa-volume-mute,
 .fa-volume {
   margin-right: 0;
+}
+
+#volume-control {
+  float: left;
+  margin-left: 0.6667em;
+  margin-top: 0.8333em;
+  -webkit-appearance: none;
+  height: 0.3667rem;
+  width: 10rem;
+  background-color: rgb(38, 38, 38);
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+  border-radius: 15px;
+  opacity: 0.5;
+}
+
+#volume-control:hover {
+  opacity: 1;
+}
+
+#volume-control::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.8667rem;
+  height: 0.8667rem;
+  border-radius: 50%;
+  background: #f67146;
+  cursor: pointer;
+}
+
+#volume-control::-moz-range-thumb {
+  width: 0.8667rem;
+  height: 0.8667rem;
+  border-radius: 50%;
+  background: #f67146;
+  cursor: pointer;
 }
