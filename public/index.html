@@ -90,6 +90,17 @@
 					<div id="main-video">
 						<div id="video">
 							<p id="videos-container__header" style="margin-left: 0.6667em;">Currently playing</span>	
+              <div id="video-react">
+                  <button id="muted" onclick="changeMute()">
+                    <i class="fas fa-volume-mute"></i>
+                  </button>
+                  <input 
+                    id="volume-control" 
+                    type="range" 
+                    min="0" max="100" value="0"
+                    onchange="changeVolume(this.value)"
+                  >
+              </div>
               <div 
                 id="video-voting" 
                 class="d-inline-flex" 
@@ -98,12 +109,6 @@
 							<div id="videoPlaying"></div>
 							<div id="video-content">
 								<div id="titlePlayingVideo"></div>
-								<div id="video-react">
-									<div id="reactLike"></div>
-										<button id="muted" onclick="changeMute()">
-                      <i class="fas fa-volume-mute"></i>
-                    </button>
-								</div>
 							</div>
               <!-- <div class="d-inline-flex">
                 <h5><i class="vote fas fa-long-arrow-alt-up"></i></h5>

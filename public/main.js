@@ -68,11 +68,26 @@ function changeMute() {
     if (player.isMuted()) {
         player.unMute();
         mutedBtn.innerHTML = `<i class="fas fa-volume"></i>`;
+        document.getElementById('volume-control').value = 30;
     } else {
         player.mute();
         mutedBtn.innerHTML = `<i class="fas fa-volume-mute"></i>`;
+        document.getElementById('volume-control').value = 0;
     }
 }
+
+function changeVolume(v) {
+    player.setVolume(v);
+    const mutedBtn = document.getElementById('muted');
+    if (v == 0) {
+        player.mute();
+        mutedBtn.innerHTML = `<i class="fas fa-volume-mute"></i>`;
+    } else {
+        player.unMute();
+        mutedBtn.innerHTML = `<i class="fas fa-volume"></i>`;
+    }
+}
+
 // var done = false;
 
 // function onPlayerStateChange(event) {
