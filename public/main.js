@@ -1,6 +1,6 @@
 var player;
 
-const updateUI = async() => {
+const updateUI = async () => {
     const fullName = document.getElementById('full-name');
     const avatar = document.getElementById('avatar');
 
@@ -20,14 +20,42 @@ const updateUI = async() => {
         }
     } catch (error) {
         document.getElementsByClassName("user-profile")[0].style.display = 'none';
-        console.log(error);
+        console.log(error.message);
     }
 };
 updateUI();
 
+function updateCount(id, likes, dislikes) {
+    const email = window.email
+    let upvoted, downvoted;
+    if (likes.findIndex(x => x === email) !== -1) {
+        upvoted = `<i class="fas fa-arrow-up q-m-u" onclick="toggleLikeVideo('${id}')"></i>`
+    } else {
+        upvoted = `<i class="fas fa-arrow-up q-m" onclick="toggleLikeVideo('${id}')"></i>`
+    }
+    if (dislikes.findIndex(x => x === email) !== - 1) {
+        downvoted = `<i class="fas fa-arrow-down q-m-d" onclick="toggleDislikeVideo('${id}')"></i>`
+    } else {
+        downvoted = `<i class="fas fa-arrow-down q-m" onclick="toggleDislikeVideo('${id}')"></i>`
+    }
+
+    let upvoteCounter = likes.length,
+        downvoteCounter = dislikes.length;
+    const ret = `
+                ${upvoted}
+                <h5 style="padding-right: 0.4333em; font-weight: 300; padding-top: 10px;">${upvoteCounter - downvoteCounter}</h5>
+                ${downvoted}
+            `;
+    if(window.playingVideo._id === id) {
+        $(`#playing-video-voting`).html(ret);
+    }else {
+        $(`#video-voting-${id}`).html(ret);
+    }
+    return ret;
+}
+
 var socket = io();
-var playingVideo = null;
-socket.on("playingVideo", async(data) => {
+socket.on("playingVideo", async (data) => {
     if (player === null || player === undefined) {
         player = new YT.Player('videoPlaying', {
             height: '390',
@@ -47,13 +75,18 @@ socket.on("playingVideo", async(data) => {
     } else {
         player.loadVideoById(`${data.playingVideo.youtubeVideoId}`);
     }
+    window.playingVideo = data.playingVideo;
     document.getElementById('titlePlayingVideo').innerHTML = `${data.playingVideo.title}`
-    updateCount(data.playingVideo._id);
+    updateCount(data.playingVideo._id, data.playingVideo.likes, data.playingVideo.dislikes);
     init();
 })
 
-socket.on("new-video-added", async() => {
+socket.on("new-video-added", async () => {
     init();
+});
+
+socket.on("video-queue-item-update", ({id, likes, dislikes}) => {
+    updateCount(id, likes, dislikes)
 })
 
 function onPlayerReady(event) {
@@ -87,50 +120,73 @@ function changeVolume(v) {
     }
 }
 
-// var done = false;
+const searchValue = document.querySelector('#search-input');
 
-// function onPlayerStateChange(event) {
-//     if (event.data == YT.PlayerState.PLAYING && !done) {
-//         setTimeout(stopVideo, 6000);
-//         done = true;
-//     }
-// }
+searchValue.oninput = async (e) => {
+    await searchVideo(e.target.value);
+};
 
-// function stopVideo() {
-//     player.stopVideo();
-// }
+const setLoading = (isLoading) => {
+    if (isLoading) {
+        $('#search-result').css('visibility', 'hidden');
+        $('#loader').css('visibility', 'visible');
+    } else {
+        $('#loader').css('visibility', 'hidden');
+        $('#search-result').css('visibility', 'visible');
+    }
+}
 
-function updateCount(id) {
-    countLikeVideo(id)
-        .then(async(response) => {
-            const user = await axios.get(`/user/me`);
-            const { email } = user.data;
-            let upvoted, downvoted;
-            if (response.likes.findIndex(x => x.authorEmail == email) > 0) {
-                upvoted = `<i class="fas fa-arrow-up q-m-u" onclick="unlike('${id}')"></i>`
-            } else {
-                upvoted = `<i class="fas fa-arrow-up q-m" onclick="like('${id}')"></i>`
-            }
-            if (response.dislikes.findIndex(x => x.authorEmail == email) > 0) {
-                downvoted = `<i class="fas fa-arrow-down q-m-d" onclick="unDislike('${id}')"></i>`
-            } else {
-                downvoted = `<i class="fas fa-arrow-down q-m" onclick="dislike('${id}')"></i>`
-            }
-            
-            let upvoteCounter = response.likes.length,
-                downvoteCounter = response.dislikes.length;
-            const ret = `
-                ${upvoted}
-                <h5 style="padding-right: 0.4333em; font-weight: 300; padding-top: 10px;">${upvoteCounter - downvoteCounter}</h5>
-                ${downvoted}
-            `;
-            document.getElementById("video-react").innerHTML = `
-                ${ret}
-            `;
-            // console.log(ret);
-            return ret;
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+const searchVideo = async (value) => {
+    try {
+        setLoading(true);
+        const response = await axios.get(`/video/search?keyword=${value}`)
+        renderListVideo(response.data);
+    } catch (error) {
+        renderListVideo([]);
+    } finally {
+        setLoading(false);
+    }
+};
+
+function renderListVideo(videos) {
+    let videoItem = '';
+    videos.map((item) => {
+        videoItem += `
+          <div class="video-item">
+              <img 
+                  src="${item.thumbnail.thumbnails[0].url}"
+                  alt="" 
+                  width="160px" height="90"
+              >
+              <div class="meta">
+                  <button class="btn btn-dark add-btn" onclick="createVideo('${item.id}')">Add</button>
+                  <div class="title">Duration: ${item.length ? item.length.simpleText : 'Chịu'} | ${item.title}</div>
+              </div>
+          </div>
+          `;
+    });
+    $('#search-result').html(videoItem);
+}
+
+async function createVideo(youtubeVideoId) {
+    const addBtns = document.getElementsByClassName('add-btn');
+    for (btn of addBtns) {
+        btn.disabled = true;
+    }
+    axios({
+        url: '/video',
+        method: 'POST',
+        data: {
+            youtubeVideoId,
+        }
+    }).then(() => {
+        for (btn of addBtns) {
+            btn.disabled = false;
+        }
+    }).catch(error => {
+        for (btn of addBtns) {
+            btn.disabled = false;
+        }
+        alert("Add cái khác giùm cái, trùng hoặc dài quá đó :((")
+    })
 }

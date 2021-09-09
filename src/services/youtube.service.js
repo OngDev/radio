@@ -21,7 +21,7 @@ export async function getYoutubeVideo(youtubeVideoId) {
 export async function searchYoutube(keyword) {
     try {
         const response = await youtubeSearchApi.GetListByKeyword(keyword);
-        return response.items;
+        return response.items.slice(0, 5);
     } catch (error) {
         console.error(error)
         throw error;

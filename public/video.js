@@ -20,51 +20,21 @@ async function getById(id) {
 }
 
 // Like
-async function likeVideo(id) {
+async function toggleLikeVideo(id) {
     try {
-        let result = await axios({
-            url: ROUTE + "/like/" + id,
-            method: "POST",
-        });
-        return result.data;
+        await axios.post(`${ROUTE}/${id}/togglelike`);
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
     }
 }
 
-// Redo liking that video
-async function unlikeVideo(id) {
-    let result = await axios({
-        url: ROUTE + "/like/" + id,
-        method: "DELETE",
-    });
-    return result.data;
-}
-
 // Dislike
-async function dislikeVideo(id) {
-    let result = await axios({
-        url: ROUTE + "/dislike/" + id,
-        method: "POST",
-    });
-    return result.data;
-}
-
-// Redo disliking that video
-async function unDislikeVideo(id) {
-    let result = await axios({
-        url: ROUTE + "/dislike/" + id,
-        method: "DELETE",
-    });
-    return result.data;
-}
-
-async function countLikeVideo(id) {
-    let result = await axios({
-        url: ROUTE + "/count/" + id,
-        method: "GET",
-    });
-    return result.data;
+async function toggleDislikeVideo(id) {
+    try {
+        await axios.post(`${ROUTE}/${id}/toggledislike`);
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 async function deleteVideo(id) {
@@ -79,34 +49,13 @@ async function deleteVideo(id) {
     }
 }
 
-async function like(id) {
-    await likeVideo(id);
-    updateCount(id);
-}
-
-async function unlike(id) {
-    await unlikeVideo(id);
-    updateCount(id);
-}
-
-async function dislike(id) {
-    await dislikeVideo(id);
-    updateCount(id);
-}
-
-async function unDislike(id) {
-    await unDislikeVideo(id);
-    updateCount(id);
-}
-
 async function init() {
     await getAll().then((response) => {
-        if (response.length == 0) return console.log("Empty");
+        if (response.length == 0) return;
         let element = "",
             counter = 0;
         videoList = response;
         videoList.map((res) => {
-            console.log(updateCount(res._id));
             element +=
                 (`<div class="videos-container__track-item" style="background: #181818">
                 <div class="row" style="padding-bottom: 0.3333em;">
@@ -116,6 +65,9 @@ async function init() {
                         src="${res.thumbnailUrl}"
                         class="thumbnail"
                         />
+                        <div class="video-voting" id="video-voting-${res._id}">
+                    ${updateCount(res._id, res.likes, res.dislikes)}
+                </div>
                     </div>
                     <div class="col-8 videos-container__track-info">
                         <div class="videos-container__track-info__video-name">
@@ -127,10 +79,7 @@ async function init() {
                     (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
                     `</div>
                 </div>
-                <div class="row voting">
-                    <div class="col-1"></div>
-                    ${updateCount(res._id)}
-                </div>
+                
             </div>`);
         });
         document.getElementById("videos-container__tracks").innerHTML = element;

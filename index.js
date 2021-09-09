@@ -63,11 +63,6 @@ app.get("/logout", (req, res) => {
     req.oidc.logout();
 });
 
-
-app.get('/search', (req, res) => {
-    res.sendFile(join(__dirname, '/public/search.html'))
-})
-
 // handler error
 app.use(handleNotFoundPage);
 app.use(handleError);

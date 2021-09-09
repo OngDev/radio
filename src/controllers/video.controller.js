@@ -1,6 +1,4 @@
-import { getVideoById, getAll as _getAll, createVideo as _createVideo, deleteVideo as _deleteVideo } from '../services/video.service.js';
-import { like, unLike, countLike } from '../services/like.service.js';
-import { dislike, unDislike, countDislike } from '../services/dislike.service.js';
+import { getVideoById, getAll as _getAll, createVideo as _createVideo, deleteVideo as _deleteVideo, toggleLike, toggleDislike } from '../services/video.service.js';
 import { searchYoutube as _searchYoutube } from '../services/youtube.service.js';
 
 export async function getById(req, res, next) {
@@ -44,53 +42,21 @@ export async function deleteVideo(req, res, next) {
     }
 }
 
-export async function likeVideo(req, res, next) {
+export async function toggleLikeVideo(req, res, next) {
     try {
         const videoId = req.params.id;
-        await like(req.oidc.user.email, videoId);
-        res.send('Sucess')
+        const updatedVideo = await toggleLike(req.oidc.user.email, videoId);
+        res.send(updatedVideo)
     } catch (error) {
         next(error);
     }
 }
 
-export async function unLikeVideo(req, res, next) {
+export async function toggleDislikeVideo(req, res, next) {
     try {
         const videoId = req.params.id;
-        await unLike(req.oidc.user.email, videoId);
-        res.send('Sucess')
-    } catch (error) {
-        next(error);
-    }
-}
-
-export async function dislikeVideo(req, res, next) {
-    try {
-        const videoId = req.params.id;
-        await dislike(req.oidc.user.email, videoId);
-        res.send('Sucess')
-    } catch (error) {
-        next(error);
-    }
-}
-
-export async function unDislikeVideo(req, res, next) {
-    try {
-        const userId = req.user;
-        const videoId = req.params.id;
-        await unDislike(userId, videoId);
-        res.send('Sucess')
-    } catch (error) {
-        next(error);
-    }
-}
-
-export async function getLikeAndDisLike(req, res, next) {
-    try {
-        const videoId = req.params.id;
-        const likes = await countLike(videoId);
-        const dislikes = await countDislike(videoId);
-        return res.json({ likes, dislikes });
+        const updatedVideo = await toggleDislike(req.oidc.user.email, videoId);
+        res.send(updatedVideo)
     } catch (error) {
         next(error);
     }

@@ -96,3 +96,81 @@ export function getPlayingVideo() {
     const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
     return { playingVideo, playedTime }
 }
+
+export async function toggleLike(authorEmail, videoId) {
+    try {
+        const video = await VideoModel.findById(videoId);
+        const existedLike = video.likes.find((item) => item === authorEmail);
+        if(existedLike) {
+            video.likes = video.likes.filter((item) => item !== authorEmail);
+        } else {
+            video.dislikes = video.dislikes.filter((item) => item !== authorEmail);
+            video.likes.push(authorEmail)
+        }
+        const savedVideo = await video.save();
+        if(videoId === playingVideo._id.toString()) {
+            io.emit('video-queue-item-update', {
+                id: savedVideo._id.toString(),
+                likes: savedVideo.likes,
+                dislikes: savedVideo.dislikes
+            });
+            return savedVideo;
+        }
+        const queueItems = videoQueue.items().map((item) => {
+            if(item._id.toString() === savedVideo._id.toString()) {
+                item.likes = savedVideo.likes;
+                item.dislikes = savedVideo.dislikes
+                io.emit('video-queue-item-update', {
+                    id: item._id.toString(),
+                    likes: item.likes,
+                    dislikes: item.dislikes
+                });
+            }
+            return item;
+        });
+
+        videoQueue.setItems(queueItems);
+        return savedVideo;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export async function toggleDislike(authorEmail, videoId) {
+    try {
+        const video = await VideoModel.findById(videoId);
+        const existedDislike = video.dislikes.find((item) => item === authorEmail);
+        if(existedDislike) {
+            video.dislikes = video.dislikes.filter((item) => item !== authorEmail);
+        } else {
+            video.likes = video.likes.filter((item) => item !== authorEmail);
+            video.dislikes.push(authorEmail)
+        }
+        const savedVideo = await video.save();
+        if(videoId === playingVideo._id.toString()) {
+            io.emit('video-queue-item-update', {
+                id: savedVideo._id.toString(),
+                likes: savedVideo.likes,
+                dislikes: savedVideo.dislikes
+            });
+            return savedVideo;
+        }
+        const queueItems = videoQueue.items().map((item) => {
+            if(item._id.toString() === savedVideo._id.toString()) {
+                item.likes = savedVideo.likes;
+                item.dislikes = savedVideo.dislikes
+                io.emit('video-queue-item-update', {
+                    id: item._id.toString(),
+                    likes: item.likes,
+                    dislikes: item.dislikes
+                });
+            }
+            return item;
+        });
+
+        videoQueue.setItems(queueItems);
+        return savedVideo;
+    } catch (error) {
+        console.log(error.message);
+    }
+}
