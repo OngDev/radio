@@ -918,6 +918,17 @@ iframe {
   margin-bottom: 10px;
   text-align: left;
 }
+.q-m {
+  color: rgb(255, 255, 255, 0.5);
+}
+
+.q-m-u {
+  color: #f67146;
+}
+
+.q-m-d {
+  color: #fff;
+}
 
 .video-voting {
   width: 100%;
@@ -928,4 +939,13 @@ iframe {
 
 .video-voting>* {
   font-size: 1rem;
+}
+
+.playing-vote {
+  width: 100px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding-left: 10px;
 }

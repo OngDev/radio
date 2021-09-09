@@ -33,14 +33,10 @@
       </svg>
     </a>
     <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active" id="btn-search" onclick="window.location='/search'">
-          <a class="nav__utility-btn">
-            <i class="fas fa-search"></i>
+      <button type="button" class="btn btn-dark mr-auto" data-toggle="modal" data-target="#searchModal">
+        <i class="fas fa-search"></i>
             Songs or podcasts
-          </a>
-        </li>
-      </ul>
+      </button>
       <span id="nav__auth">
         <a class="nav__utility-btn auth" id="btn-login" onclick="window.location='/login'">
           Login
@@ -68,8 +64,11 @@
               </button>
               <input id="volume-control" type="range" min="0" max="100" value="0" onchange="changeVolume(this.value)">
             </div>
-            <div class="video-voting" class="d-inline-flex" id="playing-video-voting"
-              style="width: 100%; margin-left: 0.6667em;">
+            <br/>
+            <div class="video-voting" >
+              <div id="playing-video-voting" class=" playing-vote">
+
+              </div>
             </div>
             <div id="videoPlaying"></div>
             <div id="video-content">
