@@ -829,6 +829,8 @@ iframe {
   background-color: rgb(38, 38, 38);
   outline: none;
   -webkit-transition: 0.2s;
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
   transition: all 0.3s;
   border-radius: 15px;
   opacity: 0.5;
@@ -872,6 +874,9 @@ iframe {
 .modal-content {
   background-color: #2c2c2c;
   padding: 20px;
+  height: 85vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .od-rule {
@@ -897,17 +902,37 @@ iframe {
   height: 40px;
   margin: auto;
   margin-top: 20px;
+  -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
   visibility: hidden;
   position: absolute;
   top: 50%;
   left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 
 .video-item {
@@ -932,20 +957,34 @@ iframe {
 
 .video-voting {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  margin-left: 0.3333rem;
 }
 
-.video-voting>* {
+.video-voting > * {
   font-size: 1rem;
 }
 
 .playing-vote {
   width: 100px !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   font-size: 12px;
   padding-left: 10px;
+  padding-top: 0.6667rem;
 }
