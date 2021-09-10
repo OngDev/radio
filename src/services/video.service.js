@@ -77,8 +77,8 @@ export async function deleteVideo(id) {
 export async function initPlaylist() {
     const videos = await VideoModel.find().populate('user', 'nickname');
     const sortedVideos = videos.sort((a, b) => {
-        const firstElementInteractions = a.likes ? a.likes.length : 0 - a.dislikes ? a.dislikes.length : 0;
-        const secondElementInteractions = b.likes ? b.likes.length : 0 - b.dislikes ? b.dislikes.length : 0;
+        const firstElementInteractions = a.likes.length - a.dislikes.length;
+        const secondElementInteractions = b.likes.length - b.dislikes.length;
 
         console.log(firstElementInteractions);
         console.log(secondElementInteractions);
@@ -86,7 +86,6 @@ export async function initPlaylist() {
         if (firstElementInteractions < secondElementInteractions) return 1;
         return 0;
     });
-    console.log(sortedVideos);
 
     for (const video of sortedVideos) {
         videoQueue.enqueue(video)
@@ -116,6 +115,8 @@ export async function toggleLike(authorEmail, videoId) {
         }
         const savedVideo = await video.save();
         if (videoId === playingVideo._id.toString()) {
+            playingVideo.likes = savedVideo.likes;
+            playingVideo.dislikes = savedVideo.dislikes;
             io.emit('video-queue-item-update', {
                 id: savedVideo._id.toString(),
                 likes: savedVideo.likes,
@@ -157,6 +158,8 @@ export async function toggleDislike(authorEmail, videoId) {
         }
         const savedVideo = await video.save();
         if (videoId === playingVideo._id.toString()) {
+            playingVideo.likes = savedVideo.likes;
+            playingVideo.dislikes = savedVideo.dislikes;
             io.emit('video-queue-item-update', {
                 id: savedVideo._id.toString(),
                 likes: savedVideo.likes,
