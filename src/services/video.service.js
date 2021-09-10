@@ -80,10 +80,13 @@ export async function initPlaylist() {
         const firstElementInteractions = a.likes ? a.likes.length : 0 - a.dislikes ? a.dislikes.length : 0;
         const secondElementInteractions = b.likes ? b.likes.length : 0 - b.dislikes ? b.dislikes.length : 0;
 
-        if (firstElementInteractions < secondElementInteractions) return -1;
-        if (firstElementInteractions > secondElementInteractions) return 1;
+        console.log(firstElementInteractions);
+        console.log(secondElementInteractions);
+        if (firstElementInteractions > secondElementInteractions) return -1;
+        if (firstElementInteractions < secondElementInteractions) return 1;
         return 0;
     });
+    console.log(sortedVideos);
 
     for (const video of sortedVideos) {
         videoQueue.enqueue(video)
