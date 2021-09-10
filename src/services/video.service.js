@@ -75,7 +75,7 @@ export async function deleteVideo(id) {
 }
 
 export async function initPlaylist() {
-    const videos = await VideoModel.find().populate('likes').populate('dislikes');
+    const videos = await VideoModel.find().populate('user', 'nickname');
     const sortedVideos = videos.sort((a, b) => {
         const firstElementInteractions = a.likes ? a.likes.length : 0 - a.dislikes ? a.dislikes.length : 0;
         const secondElementInteractions = b.likes ? b.likes.length : 0 - b.dislikes ? b.dislikes.length : 0;
