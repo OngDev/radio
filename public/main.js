@@ -1,13 +1,14 @@
 var player;
 
-const updateUI = async () => {
+const updateUI = async() => {
     const fullName = document.getElementById('full-name');
     const avatar = document.getElementById('avatar');
 
     try {
         const response = await axios.get(`/user/me`);
-        const { nickname, picture, email: userEmail } = response.data;
+        const { nickname, picture, email: userEmail, id } = response.data;
         window.email = userEmail;
+        window.userId = id;
         const isAuthenticated = nickname && picture;
         document.getElementById("btn-login").style.visibility = isAuthenticated ? 'hidden' : 'visible';
         document.getElementsByClassName("user-profile")[0].style.display = isAuthenticated ? 'block' : 'none';
@@ -26,14 +27,14 @@ const updateUI = async () => {
 updateUI();
 
 function updateCount(id, likes, dislikes) {
-    const email = window.email
+    const userId = window.userId
     let upvoted, downvoted;
-    if (likes.findIndex(x => x === email) !== -1) {
+    if (likes.findIndex(x => x === userId) !== -1) {
         upvoted = `<i class="fas fa-arrow-up q-m-u" onclick="toggleLikeVideo('${id}')"></i>`
     } else {
         upvoted = `<i class="fas fa-arrow-up q-m" onclick="toggleLikeVideo('${id}')"></i>`
     }
-    if (dislikes.findIndex(x => x === email) !== - 1) {
+    if (dislikes.findIndex(x => x === userId) !== -1) {
         downvoted = `<i class="fas fa-arrow-down q-m-d" onclick="toggleDislikeVideo('${id}')"></i>`
     } else {
         downvoted = `<i class="fas fa-arrow-down q-m" onclick="toggleDislikeVideo('${id}')"></i>`
@@ -46,16 +47,16 @@ function updateCount(id, likes, dislikes) {
                 <h5 style="padding-right: 0.4333em; font-weight: 300; padding-top: 10px;">${upvoteCounter - downvoteCounter}</h5>
                 ${downvoted}
             `;
-    if(window.playingVideo._id === id) {
+    if (window.playingVideo._id === id) {
         $(`#playing-video-voting`).html(ret);
-    }else {
+    } else {
         $(`#video-voting-${id}`).html(ret);
     }
     return ret;
 }
 
 var socket = io();
-socket.on("playingVideo", async (data) => {
+socket.on("playingVideo", async(data) => {
     if (player === null || player === undefined) {
         player = new YT.Player('videoPlaying', {
             height: '390',
@@ -81,11 +82,11 @@ socket.on("playingVideo", async (data) => {
     init();
 })
 
-socket.on("new-video-added", async () => {
+socket.on("new-video-added", async() => {
     init();
 });
 
-socket.on("video-queue-item-update", ({id, likes, dislikes}) => {
+socket.on("video-queue-item-update", ({ id, likes, dislikes }) => {
     updateCount(id, likes, dislikes)
 })
 
@@ -122,7 +123,7 @@ function changeVolume(v) {
 
 const searchValue = document.querySelector('#search-input');
 
-searchValue.oninput = async (e) => {
+searchValue.oninput = async(e) => {
     await searchVideo(e.target.value);
 };
 
@@ -136,7 +137,7 @@ const setLoading = (isLoading) => {
     }
 }
 
-const searchVideo = async (value) => {
+const searchVideo = async(value) => {
     try {
         setLoading(true);
         const response = await axios.get(`/video/search?keyword=${value}`)

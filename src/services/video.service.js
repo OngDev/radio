@@ -1,4 +1,5 @@
 import VideoModel from '../models/video.model.js';
+import UserModel from '../models/user.model.js';
 import { getYoutubeVideo } from './youtube.service.js';
 import Queue from '../utils/queue.util.js';
 import moment from 'moment';
@@ -51,8 +52,9 @@ export async function getAll() {
 export async function createVideo(youtubeVideoId, authorEmail) {
     try {
         const { title, thumbnailUrl, duration } = await getYoutubeVideo(youtubeVideoId);
+        const user = await UserModel.findOne({ email: authorEmail });
 
-        const newVideo = await VideoModel.create({ title, youtubeVideoId, authorEmail, duration, thumbnailUrl });
+        const newVideo = await VideoModel.create({ title, youtubeVideoId, user, authorEmail, duration, thumbnailUrl });
         io.emit('new-video-added', {});
         videoQueue.enqueue(newVideo)
         return newVideo;
@@ -73,7 +75,7 @@ export async function deleteVideo(id) {
 }
 
 export async function initPlaylist() {
-    const videos = await VideoModel.find().populate('likes').populate('dislikes');
+    const videos = await VideoModel.find().populate('user', 'nickname');
     const sortedVideos = videos.sort((a, b) => {
         const firstElementInteractions = a.likes ? a.likes.length : 0 - a.dislikes ? a.dislikes.length : 0;
         const secondElementInteractions = b.likes ? b.likes.length : 0 - b.dislikes ? b.dislikes.length : 0;
@@ -100,15 +102,17 @@ export function getPlayingVideo() {
 export async function toggleLike(authorEmail, videoId) {
     try {
         const video = await VideoModel.findById(videoId);
-        const existedLike = video.likes.find((item) => item === authorEmail);
-        if(existedLike) {
-            video.likes = video.likes.filter((item) => item !== authorEmail);
+        const user = await UserModel.findOne({ email: authorEmail });
+        const userId = user._id.toString();
+        const existedLike = video.likes.find((item) => item === userId);
+        if (existedLike) {
+            video.likes = video.likes.filter((item) => item !== userId);
         } else {
-            video.dislikes = video.dislikes.filter((item) => item !== authorEmail);
-            video.likes.push(authorEmail)
+            video.dislikes = video.dislikes.filter((item) => item !== userId);
+            video.likes.push(userId)
         }
         const savedVideo = await video.save();
-        if(videoId === playingVideo._id.toString()) {
+        if (videoId === playingVideo._id.toString()) {
             io.emit('video-queue-item-update', {
                 id: savedVideo._id.toString(),
                 likes: savedVideo.likes,
@@ -117,7 +121,7 @@ export async function toggleLike(authorEmail, videoId) {
             return savedVideo;
         }
         const queueItems = videoQueue.items().map((item) => {
-            if(item._id.toString() === savedVideo._id.toString()) {
+            if (item._id.toString() === savedVideo._id.toString()) {
                 item.likes = savedVideo.likes;
                 item.dislikes = savedVideo.dislikes
                 io.emit('video-queue-item-update', {
@@ -139,15 +143,17 @@ export async function toggleLike(authorEmail, videoId) {
 export async function toggleDislike(authorEmail, videoId) {
     try {
         const video = await VideoModel.findById(videoId);
-        const existedDislike = video.dislikes.find((item) => item === authorEmail);
-        if(existedDislike) {
-            video.dislikes = video.dislikes.filter((item) => item !== authorEmail);
+        const user = await UserModel.findOne({ email: authorEmail });
+        const userId = user._id.toString();
+        const existedDislike = video.dislikes.find((item) => item === userId);
+        if (existedDislike) {
+            video.dislikes = video.dislikes.filter((item) => item !== userId);
         } else {
-            video.likes = video.likes.filter((item) => item !== authorEmail);
-            video.dislikes.push(authorEmail)
+            video.likes = video.likes.filter((item) => item !== userId);
+            video.dislikes.push(userId)
         }
         const savedVideo = await video.save();
-        if(videoId === playingVideo._id.toString()) {
+        if (videoId === playingVideo._id.toString()) {
             io.emit('video-queue-item-update', {
                 id: savedVideo._id.toString(),
                 likes: savedVideo.likes,
@@ -156,7 +162,7 @@ export async function toggleDislike(authorEmail, videoId) {
             return savedVideo;
         }
         const queueItems = videoQueue.items().map((item) => {
-            if(item._id.toString() === savedVideo._id.toString()) {
+            if (item._id.toString() === savedVideo._id.toString()) {
                 item.likes = savedVideo.likes;
                 item.dislikes = savedVideo.dislikes
                 io.emit('video-queue-item-update', {

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { CLIENT_URL, NODE_ENV, MONGO_URI, PORT, BASE_URL, AUTH0_DOMAIN, CLIENT_ID, YOUTUBE_API_URL, YOUTUBE_API_KEY } = process.env;
+const { CLIENT_URL, NODE_ENV, MONGO_URI, PORT, BASE_URL, AUTH0_DOMAIN, CLIENT_ID, YOUTUBE_API_URL, YOUTUBE_API_KEY, SECRET } = process.env;
 
 const config = {
     NODE_ENV: NODE_ENV || 'dev',
@@ -13,7 +13,8 @@ const config = {
     CLIENT_ID: CLIENT_ID || 'test',
     CLIENT_URL: CLIENT_URL || 'http://localhost:3001',
     YOUTUBE_API_URL,
-    YOUTUBE_API_KEY
+    YOUTUBE_API_KEY,
+    SECRET: SECRET || 'IM_REALLY_LONG'
 }
 
 function get(key) {

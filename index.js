@@ -8,14 +8,10 @@ import videoRoutes from './src/routes/video.route.js';
 import { getPlayingVideo } from './src/services/video.service.js';
 import oidc from 'express-openid-connect';
 const auth = oidc.auth;
-import { join } from 'path';
 import { createServer } from 'http';
 import { Server } from "socket.io";
-import path from 'path'
 import * as fs from 'fs';
 import moment from 'moment';
-
-const __dirname = path.resolve()
 
 const config = {
     authRequired: false,
@@ -23,7 +19,7 @@ const config = {
     baseURL: get('base_url'),
     clientID: get('client_id'),
     issuerBaseURL: get('auth0_domain'),
-    secret: 'LONG_RANDOM_STRING',
+    secret: get('secret'),
 }
 
 // config middleware

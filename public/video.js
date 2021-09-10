@@ -74,7 +74,7 @@ async function init() {
                         ${res.title}
                         </div>
                         <div class="videos-container__track-info__suggested">
-                        Suggested by <strong>${res.authorEmail}</strong>
+                        Suggested by <strong>${res.user.nickname}</strong>
                         </div>` +
                     (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
                     `</div>
