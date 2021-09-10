@@ -53,10 +53,15 @@ export async function createVideo(youtubeVideoId, authorEmail) {
     try {
         const { title, thumbnailUrl, duration } = await getYoutubeVideo(youtubeVideoId);
         const user = await UserModel.findOne({ email: authorEmail });
-
-        const newVideo = await VideoModel.create({ title, youtubeVideoId, user, authorEmail, duration, thumbnailUrl });
+        const newVideo = await VideoModel.create({ title, youtubeVideoId, user, duration, thumbnailUrl });
         io.emit('new-video-added', {});
-        videoQueue.enqueue(newVideo)
+        videoQueue.enqueue({
+            ...newVideo._doc,
+            user: {
+                _id: user._id.toString(),
+                nickname: user.nickname,
+            }
+        })
         return newVideo;
     } catch (error) {
         console.log(error.message)
@@ -80,8 +85,6 @@ export async function initPlaylist() {
         const firstElementInteractions = a.likes.length - a.dislikes.length;
         const secondElementInteractions = b.likes.length - b.dislikes.length;
 
-        console.log(firstElementInteractions);
-        console.log(secondElementInteractions);
         if (firstElementInteractions > secondElementInteractions) return -1;
         if (firstElementInteractions < secondElementInteractions) return 1;
         return 0;
