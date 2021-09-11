@@ -131,12 +131,13 @@ export async function initPlaylist() {
         songsForQueue.push(...fiveRandomJuniorSongs);
     }
     songsForQueue.push(...seniorSongs);
-    const shuffledSongsForQueue = shuffleVideos(songsForQueue);
+    const songsForQueue = shuffleVideos(songsForQueue);
 
-    for (const video of shuffledSongsForQueue) {
+    for (const video of songsForQueue) {
         videoQueue.enqueue(video)
     }
-    return shuffledSongsForQueue;
+    io.emit('update-tracks', songsForQueue);
+    return songsForQueue;
 }
 
 function shuffleVideos(videos) {
