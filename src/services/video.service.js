@@ -83,7 +83,7 @@ export async function createVideo(youtubeVideoId, authorEmail) {
         const { title, thumbnailUrl, duration } = await getYoutubeVideo(youtubeVideoId);
         const user = await UserModel.findOne({ email: authorEmail });
         const newVideo = await VideoModel.create({ title, youtubeVideoId, user, duration, thumbnailUrl });
-        otherSongs.push({...newVideo,
+        otherSongs.push({...newVideo._doc,
             user: {
                 _id: user._id,
                 nickname: user.nickname
