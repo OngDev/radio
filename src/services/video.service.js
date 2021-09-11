@@ -179,6 +179,13 @@ export async function toggleLike(authorEmail, videoId) {
             videoQueue.setItems(queueItems);
         }
 
+        const songIndex = otherSongs.findIndex((song) => song._id.toString() === videoId);
+
+        if (songIndex !== -1) {
+            otherSongs[songIndex].likes = savedVideo.likes;
+            otherSongs[songIndex].dislikes = savedVideo.dislikes;
+        }
+
         io.emit('video-queue-item-update', {
             id: savedVideo._id.toString(),
             likes: savedVideo.likes,
@@ -216,6 +223,13 @@ export async function toggleDislike(authorEmail, videoId) {
             });
 
             videoQueue.setItems(queueItems);
+        }
+
+        const songIndex = otherSongs.findIndex((song) => song._id.toString() === videoId);
+
+        if (songIndex !== -1) {
+            otherSongs[songIndex].likes = savedVideo.likes;
+            otherSongs[songIndex].dislikes = savedVideo.dislikes;
         }
 
         io.emit('video-queue-item-update', {
