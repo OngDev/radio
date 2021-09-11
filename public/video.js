@@ -49,7 +49,7 @@ async function deleteVideo(id) {
 function renderTracks(videos, eleId) {
     let element = "",
         counter = 0;
-    videos.map((res) => {
+    videos && videos.map((res) => {
         element +=
             (`<div class="videos-container__track-item" style="background: #181818;">
             <div class="row" style="margin: 0;">
@@ -76,5 +76,6 @@ function renderTracks(videos, eleId) {
             
         </div>`);
     });
-    document.getElementById(eleId).innerHTML = element;
+
+    document.getElementById(eleId).innerHTML = element || "Empty";
 }

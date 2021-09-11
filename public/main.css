@@ -138,6 +138,7 @@ main {
   height: 100%;
   overflow: auto;
   padding-top: 12px;
+  padding-bottom: 10px;
 }
 
 .videos-container__header {
@@ -875,6 +876,7 @@ iframe {
 .modal-content {
   background-color: #2c2c2c;
   padding: 10px;
+  padding-right: 0;
   height: 85vh;
   overflow-y: auto;
 }
