@@ -26,7 +26,7 @@ const updateUI = async() => {
 };
 updateUI();
 
-function updateCount(id, likes, dislikes) {
+function updateCount(id, likes, dislikes, eleId) {
     const userId = window.userId
     let upvoted, downvoted;
     if (likes.findIndex(x => x === userId) !== -1) {
@@ -49,13 +49,24 @@ function updateCount(id, likes, dislikes) {
             `;
     if (window.playingVideo._id === id) {
         $(`#playing-video-voting`).html(ret);
+        $(`#queueTracks-${id}`).html(ret);
+        $(`#senior-tracks-${id}`).html(ret);
+        $(`#junior-tracks-${id}`).html(ret);
+    } else if (eleId === 'all') {
+        $(`#queueTracks-${id}`).html(ret);
+        $(`#senior-tracks-${id}`).html(ret);
+        $(`#junior-tracks-${id}`).html(ret);
+        $(`#other-tracks-${id}`).html(ret);
     } else {
-        $(`#video-voting-${id}`).html(ret);
+        $(`#${eleId}-${id}`).html(ret);
     }
     return ret;
 }
 
 var socket = io();
+socket.on("update-tracks", (tracks) => {
+    window.videoList = tracks;
+})
 socket.on("playingVideo", async(data) => {
     if (player === null || player === undefined) {
         player = new YT.Player('videoPlaying', {
@@ -79,15 +90,23 @@ socket.on("playingVideo", async(data) => {
     window.playingVideo = data.playingVideo;
     document.getElementById('titlePlayingVideo').innerHTML = `${data.playingVideo.title}`
     updateCount(data.playingVideo._id, data.playingVideo.likes, data.playingVideo.dislikes);
-    init();
-})
+    renderTracks(window.videoList, 'queueTracks');
+});
 
-socket.on("new-video-added", async() => {
-    init();
+socket.on("senior-tracks-update", async(tracks) => {
+    renderTracks(tracks, 'senior-tracks');
+});
+
+socket.on("junior-tracks-update", async(tracks) => {
+    renderTracks(tracks, 'junior-tracks');
+});
+
+socket.on("other-tracks-update", async(tracks) => {
+    renderTracks(tracks, 'other-tracks');
 });
 
 socket.on("video-queue-item-update", ({ id, likes, dislikes }) => {
-    updateCount(id, likes, dislikes)
+    updateCount(id, likes, dislikes, 'all')
 })
 
 function onPlayerReady(event) {
