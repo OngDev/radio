@@ -131,7 +131,7 @@ export async function initPlaylist() {
         songsForQueue.push(...fiveRandomJuniorSongs);
     }
     songsForQueue.push(...seniorSongs);
-    const songsForQueue = shuffleVideos(songsForQueue);
+    songsForQueue = shuffleVideos(songsForQueue);
 
     for (const video of songsForQueue) {
         videoQueue.enqueue(video)
