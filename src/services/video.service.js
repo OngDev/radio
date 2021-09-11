@@ -184,7 +184,7 @@ export async function toggleLike(authorEmail, videoId) {
         if (queueSongIndex !== -1) {
             songsForQueue[queueSongIndex].likes = savedVideo.likes;
             songsForQueue[queueSongIndex].dislikes = savedVideo.dislikes;
-            client.emit('update-tracks', songsForQueue);
+            io.emit('update-tracks', songsForQueue);
         }
 
         const seniorSongIndex = seniorSongs.findIndex((song) => song._id.toString() === videoId);
@@ -255,7 +255,7 @@ export async function toggleDislike(authorEmail, videoId) {
         if (queueSongIndex !== -1) {
             songsForQueue[queueSongIndex].likes = savedVideo.likes;
             songsForQueue[queueSongIndex].dislikes = savedVideo.dislikes;
-            client.emit('update-tracks', songsForQueue);
+            io.emit('update-tracks', songsForQueue);
         }
 
         const seniorSongIndex = seniorSongs.findIndex((song) => song._id.toString() === videoId);
