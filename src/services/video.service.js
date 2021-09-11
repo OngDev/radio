@@ -179,11 +179,36 @@ export async function toggleLike(authorEmail, videoId) {
             videoQueue.setItems(queueItems);
         }
 
-        const songIndex = otherSongs.findIndex((song) => song._id.toString() === videoId);
+        const queueSongIndex = songsForQueue.findIndex((song) => song._id.toString() === videoId);
 
-        if (songIndex !== -1) {
-            otherSongs[songIndex].likes = savedVideo.likes;
-            otherSongs[songIndex].dislikes = savedVideo.dislikes;
+        if (queueSongIndex !== -1) {
+            songsForQueue[queueSongIndex].likes = savedVideo.likes;
+            songsForQueue[queueSongIndex].dislikes = savedVideo.dislikes;
+            client.emit('update-tracks', songsForQueue);
+        }
+
+        const seniorSongIndex = seniorSongs.findIndex((song) => song._id.toString() === videoId);
+
+        if (seniorSongIndex !== -1) {
+            seniorSongs[seniorSongIndex].likes = savedVideo.likes;
+            seniorSongs[seniorSongIndex].dislikes = savedVideo.dislikes;
+            io.emit('senior-tracks-update', seniorSongs);
+        } else {
+            const juniorSongIndex = juniorSongs.findIndex((song) => song._id.toString() === videoId);
+
+            if (juniorSongIndex !== -1) {
+                juniorSongs[juniorSongIndex].likes = savedVideo.likes;
+                juniorSongs[juniorSongIndex].dislikes = savedVideo.dislikes;
+                io.emit('junior-tracks-update', juniorSongs);
+            } else {
+                const songIndex = otherSongs.findIndex((song) => song._id.toString() === videoId);
+
+                if (songIndex !== -1) {
+                    otherSongs[songIndex].likes = savedVideo.likes;
+                    otherSongs[songIndex].dislikes = savedVideo.dislikes;
+                    io.emit('other-tracks-update', otherSongs);
+                }
+            }
         }
 
         io.emit('video-queue-item-update', {
@@ -225,11 +250,36 @@ export async function toggleDislike(authorEmail, videoId) {
             videoQueue.setItems(queueItems);
         }
 
-        const songIndex = otherSongs.findIndex((song) => song._id.toString() === videoId);
+        const queueSongIndex = songsForQueue.findIndex((song) => song._id.toString() === videoId);
 
-        if (songIndex !== -1) {
-            otherSongs[songIndex].likes = savedVideo.likes;
-            otherSongs[songIndex].dislikes = savedVideo.dislikes;
+        if (queueSongIndex !== -1) {
+            songsForQueue[queueSongIndex].likes = savedVideo.likes;
+            songsForQueue[queueSongIndex].dislikes = savedVideo.dislikes;
+            client.emit('update-tracks', songsForQueue);
+        }
+
+        const seniorSongIndex = seniorSongs.findIndex((song) => song._id.toString() === videoId);
+
+        if (seniorSongIndex !== -1) {
+            seniorSongs[seniorSongIndex].likes = savedVideo.likes;
+            seniorSongs[seniorSongIndex].dislikes = savedVideo.dislikes;
+            io.emit('senior-tracks-update', seniorSongs);
+        } else {
+            const juniorSongIndex = juniorSongs.findIndex((song) => song._id.toString() === videoId);
+
+            if (juniorSongIndex !== -1) {
+                juniorSongs[juniorSongIndex].likes = savedVideo.likes;
+                juniorSongs[juniorSongIndex].dislikes = savedVideo.dislikes;
+                io.emit('junior-tracks-update', juniorSongs);
+            } else {
+                const songIndex = otherSongs.findIndex((song) => song._id.toString() === videoId);
+
+                if (songIndex !== -1) {
+                    otherSongs[songIndex].likes = savedVideo.likes;
+                    otherSongs[songIndex].dislikes = savedVideo.dislikes;
+                    io.emit('other-tracks-update', otherSongs);
+                }
+            }
         }
 
         io.emit('video-queue-item-update', {
