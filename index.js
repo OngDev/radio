@@ -5,7 +5,7 @@ import { handleNotFoundPage, handleError } from './src/middlewares/error.middlew
 import morgan from 'morgan';
 import userRoute from './src/routes/user.route.js';
 import videoRoutes from './src/routes/video.route.js';
-import { getPlayingVideo } from './src/services/video.service.js';
+import { getPlayingVideo, getTracksInQueue, getSenior, getJunior, getOther } from './src/services/video.service.js';
 import oidc from 'express-openid-connect';
 const auth = oidc.auth;
 import { createServer } from 'http';
@@ -27,11 +27,16 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 io.on('connection', (client) => {
+    const tracks = getTracksInQueue();
+    client.emit('update-tracks', tracks)
     const { playingVideo, playedTime } = getPlayingVideo();
     client.emit('playingVideo', {
         playingVideo,
         playedTime
     });
+    io.emit('senior-tracks-update', getSenior());
+    io.emit('junior-tracks-update', getJunior());
+    io.emit('other-tracks-update', getOther());
 
     var clientIpAddress = client.request.headers['x-forwarded-for'] || client.request.connection.remoteAddress;
     fs.appendFile('address.txt', `New connection from ${clientIpAddress} at ${moment().format()} \n`, function(err) {

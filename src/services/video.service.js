@@ -4,6 +4,11 @@ import { getYoutubeVideo } from './youtube.service.js';
 import Queue from '../utils/queue.util.js';
 import moment from 'moment';
 const videoQueue = new Queue();
+
+let seniorSongs = [];
+let juniorSongs = [];
+let otherSongs = [];
+let songsForQueue = [];
 let playingVideo = null;
 let currentVideoStartedTime = null;
 import io from '../../index.js';
@@ -41,9 +46,33 @@ export async function getVideoById(id) {
     }
 }
 
-export async function getAll() {
+export function getAll() {
     try {
-        return videoQueue.items();
+        return songsForQueue;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function getSenior() {
+    try {
+        return seniorSongs;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function getJunior() {
+    try {
+        return juniorSongs;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export function getOther() {
+    try {
+        return otherSongs;
     } catch (error) {
         throw error;
     }
@@ -54,14 +83,13 @@ export async function createVideo(youtubeVideoId, authorEmail) {
         const { title, thumbnailUrl, duration } = await getYoutubeVideo(youtubeVideoId);
         const user = await UserModel.findOne({ email: authorEmail });
         const newVideo = await VideoModel.create({ title, youtubeVideoId, user, duration, thumbnailUrl });
-        io.emit('new-video-added', {});
-        videoQueue.enqueue({
-            ...newVideo._doc,
+        otherSongs.push({...newVideo,
             user: {
-                _id: user._id.toString(),
-                nickname: user.nickname,
+                _id: user._id,
+                nickname: user.nickname
             }
-        })
+        });
+        io.emit('other-tracks-update', otherSongs);
         return newVideo;
     } catch (error) {
         console.log(error.message)
@@ -90,18 +118,38 @@ export async function initPlaylist() {
         return 0;
     });
 
-    for (const video of sortedVideos) {
+    seniorSongs = sortedVideos.slice(0, 40);
+    io.emit('senior-tracks-update', seniorSongs);
+    juniorSongs = sortedVideos.slice(40, 100);
+    io.emit('junior-tracks-update', juniorSongs);
+    otherSongs = sortedVideos.slice(100);
+    io.emit('other-tracks-update', otherSongs);
+
+    songsForQueue = [];
+    if (juniorSongs.length > 0) {
+        const fiveRandomJuniorSongs = shuffleVideos(juniorSongs).slice(0, 10);
+        songsForQueue.push(...fiveRandomJuniorSongs);
+    }
+    songsForQueue.push(...seniorSongs);
+    const shuffledSongsForQueue = shuffleVideos(songsForQueue);
+
+    for (const video of shuffledSongsForQueue) {
         videoQueue.enqueue(video)
     }
-    //TODO: Add algo
+    return shuffledSongsForQueue;
+}
 
-    return sortedVideos;
-
+function shuffleVideos(videos) {
+    return videos.sort(() => Math.random() - 0.5);
 }
 
 export function getPlayingVideo() {
     const playedTime = moment().diff(currentVideoStartedTime, 'seconds');
     return { playingVideo, playedTime }
+}
+
+export function getTracksInQueue() {
+    return songsForQueue;
 }
 
 export async function toggleLike(authorEmail, videoId) {
@@ -120,27 +168,22 @@ export async function toggleLike(authorEmail, videoId) {
         if (videoId === playingVideo._id.toString()) {
             playingVideo.likes = savedVideo.likes;
             playingVideo.dislikes = savedVideo.dislikes;
-            io.emit('video-queue-item-update', {
-                id: savedVideo._id.toString(),
-                likes: savedVideo.likes,
-                dislikes: savedVideo.dislikes
+        } else {
+            const queueItems = videoQueue.items().map((item) => {
+                if (item._id.toString() === savedVideo._id.toString()) {
+                    item.likes = savedVideo.likes;
+                    item.dislikes = savedVideo.dislikes
+                }
+                return item;
             });
-            return savedVideo;
+            videoQueue.setItems(queueItems);
         }
-        const queueItems = videoQueue.items().map((item) => {
-            if (item._id.toString() === savedVideo._id.toString()) {
-                item.likes = savedVideo.likes;
-                item.dislikes = savedVideo.dislikes
-                io.emit('video-queue-item-update', {
-                    id: item._id.toString(),
-                    likes: item.likes,
-                    dislikes: item.dislikes
-                });
-            }
-            return item;
-        });
 
-        videoQueue.setItems(queueItems);
+        io.emit('video-queue-item-update', {
+            id: savedVideo._id.toString(),
+            likes: savedVideo.likes,
+            dislikes: savedVideo.dislikes
+        });
         return savedVideo;
     } catch (error) {
         console.log(error.message);
@@ -163,27 +206,23 @@ export async function toggleDislike(authorEmail, videoId) {
         if (videoId === playingVideo._id.toString()) {
             playingVideo.likes = savedVideo.likes;
             playingVideo.dislikes = savedVideo.dislikes;
-            io.emit('video-queue-item-update', {
-                id: savedVideo._id.toString(),
-                likes: savedVideo.likes,
-                dislikes: savedVideo.dislikes
+        } else {
+            const queueItems = videoQueue.items().map((item) => {
+                if (item._id.toString() === savedVideo._id.toString()) {
+                    item.likes = savedVideo.likes;
+                    item.dislikes = savedVideo.dislikes
+                }
+                return item;
             });
-            return savedVideo;
-        }
-        const queueItems = videoQueue.items().map((item) => {
-            if (item._id.toString() === savedVideo._id.toString()) {
-                item.likes = savedVideo.likes;
-                item.dislikes = savedVideo.dislikes
-                io.emit('video-queue-item-update', {
-                    id: item._id.toString(),
-                    likes: item.likes,
-                    dislikes: item.dislikes
-                });
-            }
-            return item;
-        });
 
-        videoQueue.setItems(queueItems);
+            videoQueue.setItems(queueItems);
+        }
+
+        io.emit('video-queue-item-update', {
+            id: savedVideo._id.toString(),
+            likes: savedVideo.likes,
+            dislikes: savedVideo.dislikes
+        });
         return savedVideo;
     } catch (error) {
         console.log(error.message);

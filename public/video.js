@@ -1,8 +1,5 @@
 const ROUTE = "/video";
 
-let videoList = [];
-let videoPlaying = {};
-
 async function getAll() {
     let result = await axios({
         url: ROUTE + "/",
@@ -49,39 +46,35 @@ async function deleteVideo(id) {
     }
 }
 
-async function init() {
-    await getAll().then((response) => {
-        if (response.length == 0) return;
-        let element = "",
-            counter = 0;
-        videoList = response;
-        videoList.map((res) => {
-            element +=
-                (`<div class="videos-container__track-item" style="background: #181818">
-                <div class="row" style="padding-bottom: 0.3333em;">
-                    <div class="col-1 videos-container__track-no">${++counter}</div>
-                    <div class="col-3 videos-container__track-image">
-                        <img
-                        src="${res.thumbnailUrl}"
-                        class="thumbnail"
-                        />
-                        <div class="video-voting" id="video-voting-${res._id}">
-                    ${updateCount(res._id, res.likes, res.dislikes)}
+function renderTracks(videos, eleId) {
+    let element = "",
+        counter = 0;
+    videos.map((res) => {
+        element +=
+            (`<div class="videos-container__track-item" style="background: #181818;">
+            <div class="row" style="margin: 0;">
+                <div class="col-1 videos-container__track-no"  style="${window.playingVideo?._id === res._id? 'color: #ffb347': ''}">${++counter}</div>
+                <div class="col-3 videos-container__track-image">
+                    <img
+                    src="${res.thumbnailUrl}"
+                    class="thumbnail"
+                    />
+                    <div class="video-voting" id="${eleId}-${res._id}">
+                ${updateCount(res._id, res.likes, res.dislikes, eleId)}
+            </div>
                 </div>
+                <div class="col-8 videos-container__track-info">
+                    <div class="videos-container__track-info__video-name">
+                    ${res.title}
                     </div>
-                    <div class="col-8 videos-container__track-info">
-                        <div class="videos-container__track-info__video-name">
-                        ${res.title}
-                        </div>
-                        <div class="videos-container__track-info__suggested">
-                        Suggested by <strong>${res.user.nickname}</strong>
-                        </div>` +
-                    (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
-                    `</div>
-                </div>
-                
-            </div>`);
-        });
-        document.getElementById("videos-container__tracks").innerHTML = element;
+                    <div class="videos-container__track-info__suggested">
+                    Suggested by <strong>${res.user.nickname}</strong>
+                    </div>` +
+                (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
+                `</div>
+            </div>
+            
+        </div>`);
     });
+    document.getElementById(eleId).innerHTML = element;
 }
