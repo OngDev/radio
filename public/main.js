@@ -26,6 +26,17 @@ const updateUI = async() => {
 };
 updateUI();
 
+function doUpdateAnaly() {
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'G-WJCH2J19N3');
+}
+
 function updateCount(id, likes, dislikes, eleId) {
     const userId = window.userId
     let upvoted, downvoted;
@@ -68,6 +79,7 @@ socket.on("update-tracks", (tracks) => {
     window.videoList = tracks;
 })
 socket.on("playingVideo", async(data) => {
+    doUpdateAnaly();
     if (player === null || player === undefined) {
         player = new YT.Player('videoPlaying', {
             height: '390',
