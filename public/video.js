@@ -52,7 +52,7 @@ function renderTracks(videos, eleId) {
     videos && videos.map((res) => {
         element +=
             (`<div class="videos-container__track-item" style="background: #181818;">
-            <div class="row" style="margin: 0;">
+            <div class="row" style="margin: 0; padding-bottom: 1rem;">
                 <div class="col-1 videos-container__track-no"  style="${window.playingVideo?._id === res._id? 'color: #ffb347': ''}">${++counter}</div>
                 <div class="col-3 videos-container__track-image">
                     <img
