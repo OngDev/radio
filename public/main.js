@@ -57,7 +57,7 @@ function updateCount(id, likes, dislikes, eleId) {
         downvoteCounter = dislikes.length;
     const ret = `
                 ${upvoted}
-                <h5 style="padding-right: 0.4333em; font-weight: 300; padding-top: 10px;">${upvoteCounter - downvoteCounter}</h5>
+                <h5 class="vote-counter" style="padding-right: 0.4333em; padding-top: 10px; font-weight: 300; font-size: 1.1333rem;">${upvoteCounter - downvoteCounter}</h5>
                 ${downvoted}
             `;
     if (window.playingVideo._id === id) {
@@ -232,6 +232,7 @@ function setTheme(themeName) {
 
 function toggleTheme() {
     (localStorage.getItem('theme') === 'light-mode') ? setTheme('dark-mode') : setTheme('light-mode');
+    setLogo();
 }
 
 function setLogo() {

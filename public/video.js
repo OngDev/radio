@@ -51,7 +51,7 @@ function renderTracks(videos, eleId) {
         counter = 0;
     videos && videos.map((res) => {
         element +=
-            (`<div class="videos-container__track-item" style="background: #181818;">
+            (`<div class="videos-container__track-item">
             <div class="row" style="margin: 0; padding-bottom: 1rem;">
                 <div class="col-1 videos-container__track-no"  style="${window.playingVideo?._id === res._id? 'color: #ffb347': ''}">${++counter}</div>
                 <div class="col-3 videos-container__track-image">
@@ -68,7 +68,7 @@ function renderTracks(videos, eleId) {
                     ${res.title}
                     </div>
                     <div class="videos-container__track-info__suggested">
-                    Suggested by <strong>${res.user.nickname}</strong>
+                    Suggested by <strong classname="sugested-author">${res.user.nickname}</strong>
                     </div>` +
                 (window.email === 'admin@ongdev.com' ? `<button type="button" class="btn btn-danger btn-sm" onclick="deleteVideo('${res._id}')">Delete</button>` : '') +
                 `</div>
