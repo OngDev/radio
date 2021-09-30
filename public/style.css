@@ -25,6 +25,14 @@ a {
   text-decoration: none;
 }
 
+.light-mode {
+  --scroll-track: #e9e9e9;
+}
+
+.dark-mode {
+  --scroll-track: #292929;
+}
+
 #decorated {
   width: 100%;
   height: 100vh;
@@ -39,7 +47,7 @@ a {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #292929;
+  background: var(--scroll-track);
 }
 
 /* Handle */
